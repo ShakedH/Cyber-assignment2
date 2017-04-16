@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * Created by user on 13/04/2017.
  */
@@ -20,7 +21,7 @@ public class Encryptor
     
     public Encryptor(String keyFilePath, String IV) throws Exception
     {
-        m_Key = readKeyFromFile(keyFilePath);
+        m_Key = ReadKeyFromFile(keyFilePath);
         m_IV = IV;
     }
     
@@ -31,8 +32,9 @@ public class Encryptor
         for (int i = 0; i < plainText.length() / 10; i++)
         {
             String segment = plainText.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
-            previousSegment = EncryptSegment(xor(previousSegment, segment));
-            result += previousSegment;
+            segment = EncryptSegment(XOR(previousSegment, segment));
+            result += segment;
+            previousSegment = segment;
         }
         return result;
     }
@@ -45,7 +47,7 @@ public class Encryptor
         return result;
     }
     
-    private Map<Character, Character> readKeyFromFile(String keyFilePath) throws Exception
+    private Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
     {
         Map<Character, Character> key = new HashMap<Character, Character>();
         File file = new File(keyFilePath);
@@ -59,7 +61,7 @@ public class Encryptor
         return key;
     }
     
-    public String xor(String a, String b)
+    public String XOR(String a, String b)
     {
         StringBuilder sb = new StringBuilder();
         for (int k = 0; k < a.length(); k++)

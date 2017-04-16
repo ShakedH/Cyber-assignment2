@@ -9,23 +9,45 @@ public class Main
     public static void main(String[] args)
     {
         // CLI Setup
-        Options options = SetCLIOptions();
+        Options options = GetCLIOptions();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter helpFormatter = new HelpFormatter();
         CommandLine cmd;
         try
         {
             cmd = parser.parse(options, args);
+            String command = cmd.getOptionValue("command").toLowerCase();
+            if (command.equals("encryption"))
+                Encrypt(cmd);
+            else if (command.equals("decryption"))
+                Decrypt(cmd);
+            else if (command.equals("attack"))
+                Attack(cmd);
+            else
+                throw new IllegalArgumentException("Unknown Command");
         } catch (Exception e)
         {
             System.out.println(e.getMessage());
-            helpFormatter.printHelp("Cyber",options);
+            if (e instanceof ParseException)
+                helpFormatter.printHelp("Cyber", options);
             System.exit(1);
             return;
         }
     }
     
-    private static Options SetCLIOptions()
+    private static void Attack(CommandLine cmd)
+    {
+    }
+    
+    private static void Decrypt(CommandLine cmd)
+    {
+    }
+    
+    private static void Encrypt(CommandLine cmd)
+    {
+    }
+    
+    private static Options GetCLIOptions()
     {
         Options options = new Options();
         
