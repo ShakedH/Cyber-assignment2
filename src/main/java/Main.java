@@ -45,6 +45,7 @@ public class Main
         {
             if (!cmd.hasOption('t'))
                 throw new IllegalArgumentException("Missing text file path");
+            // This is just a comment
             String textFilePath = cmd.getOptionValue('t');
             String text = CommonFunctions.ReadFromFile(textFilePath);
             if (!cmd.hasOption('v'))
