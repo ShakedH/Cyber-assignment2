@@ -22,6 +22,7 @@ public class Attacker
     
     public void Attack10() throws IOException
     {
+        // The following char array represents the HashMap values of the cipher key. The HashMap keys of the cipher key are constant a->h sorted
         char[] permutation = {'c', 'g', 'e', 'd', 'f', 'h', 'a', 'b'};
         StringBuilder decryptedCipher = new StringBuilder();
         BruteForceDecryption(permutation, 0, permutation.length - 1, decryptedCipher);
@@ -38,7 +39,7 @@ public class Attacker
             String previousSegment = m_IV;
             for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
             {
-                String segment = m_CipherText.substring(i, i + m_BlockSize);
+                String segment = m_CipherText.substring(i, Math.min(i + m_BlockSize, m_CipherText.length()));
                 String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
                 decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
                 decryptedCipher.append(decryptedSegment);
