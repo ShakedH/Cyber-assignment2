@@ -34,6 +34,20 @@ public class CommonFunctions
         return key;
     }
     
+    public static Map<Character, Character> ReadKeyReversedFromFile(String keyFilePath) throws Exception
+    {
+        Map<Character, Character> key = new HashMap<Character, Character>();
+        File file = new File(keyFilePath);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String st;
+        while ((st = br.readLine()) != null)
+        {
+            String[] split = st.split(" ");
+            key.put(split[1].charAt(0), split[0].charAt(0));
+        }
+        return key;
+    }
+    
     public static String XOR(String a, String b)
     {
         StringBuilder sb = new StringBuilder();
