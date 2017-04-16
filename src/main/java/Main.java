@@ -25,7 +25,8 @@ public class Main
                 Attack(cmd);
             else
                 throw new IllegalArgumentException("Unknown Command");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             System.out.println(e.getMessage());
             if (e instanceof ParseException)
@@ -82,6 +83,13 @@ public class Main
     
     private static void Attack(CommandLine cmd)
     {
+        if (!cmd.hasOption('a'))
+            throw new IllegalArgumentException("Missing algorithm");
+        if (!cmd.hasOption('t'))
+            throw new IllegalArgumentException("Missing cipher text path");
+        if(!cmd.hasOption('v'))
+            throw new IllegalArgumentException("Missing initial vector path");
+        String algorithm = cmd.getOptionValue("algorithm");
     }
     
     private static Options GetCLIOptions()
@@ -98,32 +106,32 @@ public class Main
         command.setRequired(true);
         options.addOption(command);
         
-        Option text = new Option("t", "text", true, "Text File Path");
+        Option text = new Option("t", "text", true, "Text file path");
         text.setArgs(1);
         text.setRequired(true);
         options.addOption(text);
         
-        Option key = new Option("k", "key", true, "Key File Path");
+        Option key = new Option("k", "key", true, "Key file path");
         key.setArgs(1);
         key.setRequired(false);
         options.addOption(key);
         
-        Option vector = new Option("v", "vector", true, "Initial Vector File Path");
+        Option vector = new Option("v", "vector", true, "Initial vector file path");
         vector.setArgs(1);
         vector.setRequired(false);
         options.addOption(vector);
         
-        Option output = new Option("o", "output", true, "Output File Path");
+        Option output = new Option("o", "output", true, "Output file path");
         output.setArgs(1);
         output.setRequired(false);
         options.addOption(output);
         
-        Option knownPlainText = new Option("kp", "KnownPlainText", true, "Known Plain Text File Path");
+        Option knownPlainText = new Option("kp", "KnownPlainText", true, "Known plain text file path");
         knownPlainText.setArgs(1);
         knownPlainText.setRequired(false);
         options.addOption(knownPlainText);
         
-        Option KnownCipherText = new Option("kc", "KnownCipherText", true, "Known Cipher Text File Path");
+        Option KnownCipherText = new Option("kc", "KnownCipherText", true, "Known cipher text file path");
         KnownCipherText.setArgs(1);
         KnownCipherText.setRequired(false);
         options.addOption(KnownCipherText);
