@@ -1,4 +1,5 @@
 import org.apache.commons.io.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -64,12 +65,12 @@ public class CommonFunctions
     public static void WriteToFile(String filePath, String text, boolean append) throws IOException
     {
         File file = new File(filePath);
-        FileUtils.write(file, text, append);
+        FileUtils.write(file, text, "UTF-8", append);
     }
     
     public static String ReadFromFile(String filePath) throws IOException
     {
         File file = new File(filePath);
-        return FileUtils.readFileToString(file);
+        return FileUtils.readFileToString(file, "UTF-8");
     }
 }

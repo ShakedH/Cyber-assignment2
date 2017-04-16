@@ -29,7 +29,7 @@ public class Attacker
     
     private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, StringBuilder decryptedCipher) throws IOException
     {
-        if (startIndex == endIndex)
+        if (startIndex == endIndex)     // A permutation is reached
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
             for (int i = 0; i < permutation.length; i++)
