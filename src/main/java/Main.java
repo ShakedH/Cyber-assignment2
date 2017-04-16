@@ -53,6 +53,13 @@ public class Main
             if (!cmd.hasOption('k'))
                 throw new IllegalArgumentException("Missing key file path");
             String keyFilePath = cmd.getOptionValue('k');
+            
+            Decryptor decryptor = new Decryptor(keyFilePath, vector);
+            String plainText = decryptor.Decrypt(textFilePath);
+            if (cmd.hasOption('o'))
+                CommonFunctions.WriteToFile(cmd.getOptionValue('o'), plainText, false);
+            else
+                System.out.println("Plain text:\n" + plainText);
         }
     }
     
