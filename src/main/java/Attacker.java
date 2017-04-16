@@ -22,29 +22,30 @@ public class Attacker
     
     public void Attack10() throws IOException
     {
-        char[] permutation = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-        String decryptedCipher = "";
+        char[] permutation = {'c', 'g', 'e', 'd', 'f', 'h', 'a', 'b'};
+        StringBuilder decryptedCipher = new StringBuilder();
         BruteForceDecryption(permutation, 0, permutation.length - 1, decryptedCipher);
     }
     
-    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, String decryptedCipher) throws IOException
+    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, StringBuilder decryptedCipher) throws IOException
     {
-        if (startIndex == endIndex)
+        if (startIndex == endIndex)     // A permutation is reached
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
             for (int i = 0; i < permutation.length; i++)
                 key.put((char)(i + 97), permutation[i]);
+            
             String previousSegment = m_IV;
             for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
             {
                 String segment = m_CipherText.substring(i, i + m_BlockSize);
                 String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
                 decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
-                decryptedCipher += decryptedSegment;
+                decryptedCipher.append(decryptedSegment);
                 previousSegment = segment;
             }
             CommonFunctions.WriteToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
-            decryptedCipher = "";
+            decryptedCipher = new StringBuilder();
         }
         else
         {

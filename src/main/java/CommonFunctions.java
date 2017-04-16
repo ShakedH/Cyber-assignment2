@@ -14,16 +14,16 @@ public class CommonFunctions
 {
     public static String EncryptDecryptSegmentByKey(String segment, Map<Character, Character> key)
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < segment.length(); i++)
         {
             char current = segment.charAt(i);
             if (key.containsKey(current))
-                result += key.get(current);
+                result.append(key.get(current));
             else
-                result += current;
+                result.append(current);
         }
-        return result;
+        return result.toString();
     }
     
     public static Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
@@ -65,12 +65,12 @@ public class CommonFunctions
     public static void WriteToFile(String filePath, String text, boolean append) throws IOException
     {
         File file = new File(filePath);
-        FileUtils.write(file, text, append);
+        FileUtils.write(file, text, "UTF-8", append);
     }
     
     public static String ReadFromFile(String filePath) throws IOException
     {
         File file = new File(filePath);
-        return FileUtils.readFileToString(file);
+        return FileUtils.readFileToString(file, "UTF-8");
     }
 }
