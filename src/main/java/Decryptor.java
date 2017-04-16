@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 
 /**
@@ -25,15 +27,16 @@ public class Decryptor
     {
         String text = "";
         String previousCipher = m_IV;
-        for (int i = 0; i < (cipher.length() / m_BlockSize); i++)
+        for (int i = 0; i < cipher.length(); i += m_BlockSize)
         {
-            String segment = cipher.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
+            String segment = cipher.substring(i, i + m_BlockSize);
             String decrypted = CommonFunctions.EncryptSegmentByKey(segment, m_ReversedKey);
-            decrypted = CommonFunctions.XOR(previousCipher, decrypted);
-            text += decrypted;
+            String xor = CommonFunctions.XOR(previousCipher, decrypted);
+            text += xor;
             previousCipher = segment;
         }
-        
-        return text;
+        String toRemove = "";
+        toRemove += (char) 0;
+        return StringUtils.strip(text, toRemove);
     }
 }

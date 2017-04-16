@@ -50,4 +50,30 @@ public class PartATests
         }
     }
     
+    @Test
+    public void TestEncryptAndDecrypt()
+    {
+        String directory = "C:\\Users\\user\\Dropbox\\לימודים\\שנה ג' סמסטר ב'\\אבטחה\\מטלה 2\\Files\\";
+        String keyFilePath = directory + "key_example.txt";
+        String plainTextFilePath = directory + "plainMsg_example.txt";
+        String vectorFilePath = directory + "IV_example.txt";
+        String cipherFilePath = directory + "cipherMsg_example.txt";
+        try
+        {
+            String givenPlainText = CommonFunctions.ReadFromFile(plainTextFilePath);
+            String givenCipheredText = CommonFunctions.ReadFromFile(cipherFilePath);
+            Encryptor encryptor = new Encryptor(keyFilePath,CommonFunctions.ReadFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath,CommonFunctions.ReadFromFile(vectorFilePath));
+    
+            String cipher = encryptor.Encrypt(givenPlainText);
+            String decrypt = decryptor.Decrypt(cipher);
+            
+            Assert.assertEquals(givenPlainText,decrypt);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+    
 }
