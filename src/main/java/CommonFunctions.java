@@ -58,7 +58,7 @@ public class CommonFunctions
     {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length(); i++)
-            sb.append((char)(a.charAt(i) ^ b.charAt(i)));
+            sb.append((char) (a.charAt(i) ^ b.charAt(i % b.length())));
         return sb.toString();
     }
     
