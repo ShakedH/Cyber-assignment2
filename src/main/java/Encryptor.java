@@ -31,12 +31,13 @@ public class Encryptor
         if (missingChars != 0)
             plainText += StringUtils.repeat((char) 0, missingChars);
         
-        for (int i = 0; i < plainText.length(); i++)
+        for (int i = 0; i < plainText.length(); i += m_BlockSize)
         {
-            String segment = plainText.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
-            segment = CommonFunctions.EncryptSegmentByKey(CommonFunctions.XOR(previousSegment, segment), m_Key);
-            result += segment;
-            previousSegment = segment;
+            String segment = plainText.substring(i, i + m_BlockSize);
+            String xor = CommonFunctions.XOR(previousSegment, segment);
+            String cipheredSegment = CommonFunctions.EncryptSegmentByKey(xor, m_Key);
+            result += cipheredSegment;
+            previousSegment = cipheredSegment;
         }
         return result;
     }

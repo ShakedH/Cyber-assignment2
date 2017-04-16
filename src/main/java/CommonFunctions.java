@@ -14,9 +14,15 @@ public class CommonFunctions
 {
     public static String EncryptSegmentByKey(String segment, Map<Character, Character> key)
     {
-        String result = segment;
-        for (Character c : key.keySet())
-            result = result.replace(c, key.get(c));
+        String result = "";
+        for (int i = 0; i < segment.length(); i++)
+        {
+            char current = segment.charAt(i);
+            if (key.containsKey(current))
+                result += key.get(current);
+            else
+                result += current;
+        }
         return result;
     }
     
@@ -51,8 +57,8 @@ public class CommonFunctions
     public static String XOR(String a, String b)
     {
         StringBuilder sb = new StringBuilder();
-        for (int k = 0; k < a.length(); k++)
-            sb.append((a.charAt(k) ^ b.charAt(k + (Math.abs(a.length() - b.length())))));
+        for (int i = 0; i < a.length(); i++)
+            sb.append((char) (a.charAt(i) ^ b.charAt(i % b.length())));
         return sb.toString();
     }
     
