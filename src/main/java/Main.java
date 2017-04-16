@@ -27,10 +27,10 @@ public class Main
                 Attack(cmd);
             else
                 throw new IllegalArgumentException("Unknown Command");
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println(e.getMessage());
+            // FIXME: 16/04/2017 delete this
             e.printStackTrace();
             if (e instanceof ParseException)
                 helpFormatter.printHelp("Cyber", options);
@@ -56,7 +56,7 @@ public class Main
             String keyFilePath = cmd.getOptionValue('k');
             
             Decryptor decryptor = new Decryptor(keyFilePath, vector);
-            String plainText = decryptor.Decrypt(textFilePath);
+            String plainText = decryptor.Decrypt(text);
             if (cmd.hasOption('o'))
                 CommonFunctions.WriteToFile(cmd.getOptionValue('o'), plainText, false);
             else

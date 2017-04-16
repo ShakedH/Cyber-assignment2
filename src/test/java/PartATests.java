@@ -53,27 +53,29 @@ public class PartATests
     @Test
     public void TestEncryptAndDecrypt()
     {
-        String directory = "C:\\Users\\user\\Dropbox\\לימודים\\שנה ג' סמסטר ב'\\אבטחה\\מטלה 2\\Files\\";
-        String keyFilePath = directory + "key_example.txt";
-        String plainTextFilePath = directory + "plainMsg_example.txt";
-        String vectorFilePath = directory + "IV_example.txt";
-        String cipherFilePath = directory + "cipherMsg_example.txt";
+        String directory = "C:\\Users\\user\\Dropbox\\לימודים\\שנה ג' סמסטר ב'\\אבטחה\\מטלה 2\\Files\\Corpus\\";
+        String keyFilePath = directory + "key.txt";
+        String fileName = "Alice";
+        String plainTextFilePath = directory + fileName + ".txt";
+        String vectorFilePath = directory + "vector.txt";
+        String cipherOutput = directory + fileName + "_cipher.txt";
+        String decrypted = directory + fileName + "_dec.txt";
         try
         {
             String givenPlainText = CommonFunctions.ReadFromFile(plainTextFilePath);
-            String givenCipheredText = CommonFunctions.ReadFromFile(cipherFilePath);
-            Encryptor encryptor = new Encryptor(keyFilePath,CommonFunctions.ReadFromFile(vectorFilePath));
-            Decryptor decryptor = new Decryptor(keyFilePath,CommonFunctions.ReadFromFile(vectorFilePath));
-    
-            String cipher = encryptor.Encrypt(givenPlainText);
-            String decrypt = decryptor.Decrypt(cipher);
+            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
             
-            Assert.assertEquals(givenPlainText,decrypt);
+//            String cipher = encryptor.Encrypt(givenPlainText);
+//            CommonFunctions.WriteToFile(cipherOutput, cipher, false);
+            String decrypt = decryptor.Decrypt(CommonFunctions.ReadFromFile(cipherOutput));
+            CommonFunctions.WriteToFile(decrypted, decrypt, false);
+            
+            Assert.assertEquals(givenPlainText, decrypt);
         } catch (Exception e)
         {
             e.printStackTrace();
             Assert.fail();
         }
     }
-    
 }
