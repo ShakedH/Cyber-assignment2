@@ -66,8 +66,8 @@ public class PartATests
             Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
             
-//            String cipher = encryptor.Encrypt(givenPlainText);
-//            CommonFunctions.WriteToFile(cipherOutput, cipher, false);
+            String cipher = encryptor.Encrypt(givenPlainText);
+            CommonFunctions.WriteToFile(cipherOutput, cipher, false);
             String decrypt = decryptor.Decrypt(CommonFunctions.ReadFromFile(cipherOutput));
             CommonFunctions.WriteToFile(decrypted, decrypt, false);
             
