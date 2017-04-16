@@ -35,7 +35,7 @@ public class Encryptor
         {
             String segment = plainText.substring(i, i + m_BlockSize);
             String xor = CommonFunctions.XOR(previousSegment, segment);
-            String cipheredSegment = CommonFunctions.EncryptSegmentByKey(xor, m_Key);
+            String cipheredSegment = CommonFunctions.EncryptDecryptSegmentByKey(xor, m_Key);
             result += cipheredSegment;
             previousSegment = cipheredSegment;
         }

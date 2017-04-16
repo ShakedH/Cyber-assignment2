@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class CommonFunctions
 {
-    public static String EncryptSegmentByKey(String segment, Map<Character, Character> key)
+    public static String EncryptDecryptSegmentByKey(String segment, Map<Character, Character> key)
     {
         String result = "";
         for (int i = 0; i < segment.length(); i++)
@@ -58,7 +58,7 @@ public class CommonFunctions
     {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length(); i++)
-            sb.append((char)(a.charAt(i) ^ b.charAt(i % b.length())));
+            sb.append((char)(a.charAt(i) ^ b.charAt(i)));
         return sb.toString();
     }
     

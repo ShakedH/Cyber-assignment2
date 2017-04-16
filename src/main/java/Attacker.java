@@ -17,7 +17,7 @@ public class Attacker
     {
         m_CipherText = CommonFunctions.ReadFromFile(cipherTextPath);
         m_IV = CommonFunctions.ReadFromFile(ivPath);
-        m_OutputPath = outputPath + "\\PlainText.txt";
+        m_OutputPath = outputPath + "\\DecryptedCipher.txt";
     }
     
     public void Attack10() throws IOException
@@ -38,12 +38,12 @@ public class Attacker
             for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
             {
                 String segment = m_CipherText.substring(i, i + m_BlockSize);
-                String decryptedSegment = CommonFunctions.EncryptSegmentByKey(segment, key);
+                String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
                 decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
                 decryptedCipher += decryptedSegment;
                 previousSegment = segment;
             }
-            CommonFunctions.WriteToFile(m_OutputPath, new String(permutation) + "\n" + decryptedCipher + "\n", true);
+            CommonFunctions.WriteToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
             decryptedCipher = "";
         }
         else

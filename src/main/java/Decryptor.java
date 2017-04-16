@@ -30,7 +30,7 @@ public class Decryptor
         for (int i = 0; i < cipher.length(); i += m_BlockSize)
         {
             String segment = cipher.substring(i, i + m_BlockSize);
-            String decrypted = CommonFunctions.EncryptSegmentByKey(segment, m_ReversedKey);
+            String decrypted = CommonFunctions.EncryptDecryptSegmentByKey(segment, m_ReversedKey);
             String xor = CommonFunctions.XOR(previousCipher, decrypted);
             text += xor;
             previousCipher = segment;
