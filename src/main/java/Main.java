@@ -25,7 +25,8 @@ public class Main
                 Attack(cmd);
             else
                 throw new IllegalArgumentException("Unknown Command");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             System.out.println(e.getMessage());
             if (e instanceof ParseException)
