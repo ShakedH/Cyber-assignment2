@@ -4,6 +4,8 @@
 
 import org.apache.commons.cli.*;
 
+import java.io.IOException;
+
 public class Main
 {
     public static void main(String[] args)
@@ -32,7 +34,6 @@ public class Main
             if (e instanceof ParseException)
                 helpFormatter.printHelp("Cyber", options);
             System.exit(1);
-            return;
         }
     }
     
@@ -81,15 +82,30 @@ public class Main
         }
     }
     
-    private static void Attack(CommandLine cmd)
+    private static void Attack(CommandLine cmd) throws IOException
     {
+        // Arguments validity check
         if (!cmd.hasOption('a'))
             throw new IllegalArgumentException("Missing algorithm");
         if (!cmd.hasOption('t'))
             throw new IllegalArgumentException("Missing cipher text path");
-        if(!cmd.hasOption('v'))
+        if (!cmd.hasOption('v'))
             throw new IllegalArgumentException("Missing initial vector path");
+        if (!cmd.hasOption('o'))
+            throw new IllegalArgumentException("Missing output path");
+        
         String algorithm = cmd.getOptionValue("algorithm");
+        String cipherTextPath = cmd.getOptionValue("text");
+        String ivPath = cmd.getOptionValue("vector");
+        String outputPath = cmd.getOptionValue("output");
+        
+        Attacker attacker = new Attacker(cipherTextPath, ivPath, outputPath);
+        if (algorithm.equals("sub_cbc_10"))
+            attacker.Attack10();
+        else if (algorithm.equals("sub_cbc_52"))
+            attacker.Attack52();
+        else
+            throw new IllegalArgumentException("Invalid algorithm. Algorithm must be 'sub_cbc_10' or 'sub_cbc_52'");
     }
     
     private static Options GetCLIOptions()
