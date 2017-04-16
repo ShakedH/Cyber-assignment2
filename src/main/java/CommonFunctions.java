@@ -14,16 +14,16 @@ public class CommonFunctions
 {
     public static String EncryptDecryptSegmentByKey(String segment, Map<Character, Character> key)
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < segment.length(); i++)
         {
             char current = segment.charAt(i);
             if (key.containsKey(current))
-                result += key.get(current);
+                result.append(key.get(current));
             else
-                result += current;
+                result.append(current);
         }
-        return result;
+        return result.toString();
     }
     
     public static Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
