@@ -31,6 +31,7 @@ public class Main
         {
             System.out.println(e.getMessage());
             // FIXME: 16/04/2017 delete this
+            // FIXME: 16/04/2017 test
             e.printStackTrace();
             if (e instanceof ParseException)
                 helpFormatter.printHelp("Cyber", options);
