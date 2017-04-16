@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Ron Michaeli on 16-Apr-17.
@@ -18,29 +20,41 @@ public class Attacker
         m_OutputPath = outputPath + "\\PlainText.txt";
     }
     
-    public void Attack10()
+    public void Attack10() throws IOException
     {
         char[] permutation = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-        String decryptedCipher = BruteForceDecryption(permutation, 0, permutation.length - 1);
+        String decryptedCipher = "";
+        BruteForceDecryption(permutation, 0, permutation.length - 1, decryptedCipher);
     }
     
-    private String BruteForceDecryption(char[] permutation, int startIndex, int endIndex)
+    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, String decryptedCipher) throws IOException
     {
         if (startIndex == endIndex)
         {
-            String segment = m_CipherText.substring(0, 10);
-            
+            Map<Character, Character> key = new HashMap<Character, Character>();
+            for (int i = 0; i < permutation.length; i++)
+                key.put((char)(i + 97), permutation[i]);
+            String previousSegment = m_IV;
+            for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
+            {
+                String segment = m_CipherText.substring(i, i + m_BlockSize);
+                String decryptedSegment = CommonFunctions.EncryptSegmentByKey(segment, key);
+                decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
+                decryptedCipher += decryptedSegment;
+                previousSegment = segment;
+            }
+            CommonFunctions.WriteToFile(m_OutputPath, new String(permutation) + "\n" + decryptedCipher + "\n", true);
+            decryptedCipher = "";
         }
         else
         {
             for (int i = startIndex; i < endIndex; i++)
             {
                 swap(permutation, startIndex, i);
-                BruteForceDecryption(permutation, startIndex + 1, endIndex);
+                BruteForceDecryption(permutation, startIndex + 1, endIndex, decryptedCipher);
                 swap(permutation, startIndex, i);
             }
         }
-        return null;
     }
     
     private void swap(char[] array, int a, int b)
