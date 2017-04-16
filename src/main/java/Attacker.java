@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +42,7 @@ public class Attacker
             for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
             {
                 String segment = m_CipherText.substring(i, Math.min(i + m_BlockSize, m_CipherText.length()));
+                segment += StringUtils.repeat((char)0, m_BlockSize - segment.length());
                 String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
                 decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
                 decryptedCipher.append(decryptedSegment);
@@ -47,6 +50,7 @@ public class Attacker
             }
             CommonFunctions.WriteToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
             decryptedCipher = new StringBuilder();
+            System.exit(1);
         }
         else
         {
