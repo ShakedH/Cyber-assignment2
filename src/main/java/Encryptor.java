@@ -29,6 +29,10 @@ public class Encryptor
     {
         String result = "";
         String previousSegment = m_IV;
+        if(plainText.length() %10 !=0)
+        {
+//            plainText += String.join();
+        }
         for (int i = 0; i < plainText.length() / 10; i++)
         {
             String segment = plainText.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
