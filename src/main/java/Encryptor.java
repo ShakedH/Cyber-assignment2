@@ -34,20 +34,10 @@ public class Encryptor
         for (int i = 0; i < plainText.length(); i++)
         {
             String segment = plainText.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
-            segment = EncryptSegment(CommonFunctions.XOR(previousSegment, segment));
+            segment = CommonFunctions.EncryptSegmentByKey(CommonFunctions.XOR(previousSegment, segment), m_Key);
             result += segment;
             previousSegment = segment;
         }
         return result;
     }
-    
-    private String EncryptSegment(String segment)
-    {
-        String result = segment;
-        for (Character c : m_Key.keySet())
-            result = result.replace(c, m_Key.get(c));
-        return result;
-    }
-    
-    
 }

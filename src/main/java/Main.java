@@ -35,10 +35,6 @@ public class Main
         }
     }
     
-    private static void Attack(CommandLine cmd)
-    {
-    }
-    
     private static void Decrypt(CommandLine cmd) throws Exception
     {
         String algorithm = cmd.getOptionValue("algorithm");
@@ -82,6 +78,10 @@ public class Main
             else
                 System.out.println("Cipher:\n" + cipher);
         }
+    }
+    
+    private static void Attack(CommandLine cmd)
+    {
     }
     
     private static Options GetCLIOptions()

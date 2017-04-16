@@ -12,6 +12,14 @@ import java.util.Map;
  */
 public class CommonFunctions
 {
+    public static String EncryptSegmentByKey(String segment, Map<Character, Character> key)
+    {
+        String result = segment;
+        for (Character c : key.keySet())
+            result = result.replace(c, key.get(c));
+        return result;
+    }
+    
     public static Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
     {
         Map<Character, Character> key = new HashMap<Character, Character>();
@@ -34,10 +42,10 @@ public class CommonFunctions
         return sb.toString();
     }
     
-    public static void WriteToFile(String filePath, String cipher, boolean append) throws IOException
+    public static void WriteToFile(String filePath, String text, boolean append) throws IOException
     {
         File file = new File(filePath);
-        FileUtils.write(file, cipher, append);
+        FileUtils.write(file, text, append);
     }
     
     public static String ReadFromFile(String filePath) throws IOException
