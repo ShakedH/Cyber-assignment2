@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Map;
 
 /**
@@ -21,7 +19,7 @@ public class Encryptor
     
     public Encryptor(String keyFilePath, String IV) throws Exception
     {
-        m_Key = ReadKeyFromFile(keyFilePath);
+        m_Key = CommonFunctions.ReadKeyFromFile(keyFilePath);
         m_IV = IV;
     }
     
@@ -29,14 +27,14 @@ public class Encryptor
     {
         String result = "";
         String previousSegment = m_IV;
-        if(plainText.length() %10 !=0)
-        {
-//            plainText += String.join();
-        }
-        for (int i = 0; i < plainText.length() / 10; i++)
+        int missingChars = m_BlockSize - plainText.length() % m_BlockSize;
+        if (missingChars != 0)
+            plainText += StringUtils.repeat((char) 0, missingChars);
+        
+        for (int i = 0; i < plainText.length(); i++)
         {
             String segment = plainText.substring(i * m_BlockSize, i * m_BlockSize + m_BlockSize);
-            segment = EncryptSegment(XOR(previousSegment, segment));
+            segment = EncryptSegment(CommonFunctions.XOR(previousSegment, segment));
             result += segment;
             previousSegment = segment;
         }
@@ -51,25 +49,5 @@ public class Encryptor
         return result;
     }
     
-    private Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
-    {
-        Map<Character, Character> key = new HashMap<Character, Character>();
-        File file = new File(keyFilePath);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String st;
-        while ((st = br.readLine()) != null)
-        {
-            String[] split = st.split(" ");
-            key.put(split[0].charAt(0), split[1].charAt(0));
-        }
-        return key;
-    }
     
-    public String XOR(String a, String b)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (int k = 0; k < a.length(); k++)
-            sb.append((a.charAt(k) ^ b.charAt(k + (Math.abs(a.length() - b.length())))));
-        return sb.toString();
-    }
 }

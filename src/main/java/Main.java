@@ -25,8 +25,7 @@ public class Main
                 Attack(cmd);
             else
                 throw new IllegalArgumentException("Unknown Command");
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println(e.getMessage());
             if (e instanceof ParseException)
@@ -40,12 +39,49 @@ public class Main
     {
     }
     
-    private static void Decrypt(CommandLine cmd)
+    private static void Decrypt(CommandLine cmd) throws Exception
     {
+        String algorithm = cmd.getOptionValue("algorithm");
+        if (algorithm.equals("sub_cbc_10"))
+        {
+            if (!cmd.hasOption('t'))
+                throw new IllegalArgumentException("Missing text file path");
+            String textFilePath = cmd.getOptionValue('t');
+            String text = CommonFunctions.ReadFromFile(textFilePath);
+            if (!cmd.hasOption('v'))
+                throw new IllegalArgumentException("Missing Initial Vector file path");
+            String vectorFilePath = cmd.getOptionValue('v');
+            String vector = CommonFunctions.ReadFromFile(vectorFilePath);
+            if (!cmd.hasOption('k'))
+                throw new IllegalArgumentException("Missing key file path");
+            String keyFilePath = cmd.getOptionValue('k');
+        }
     }
     
-    private static void Encrypt(CommandLine cmd)
+    private static void Encrypt(CommandLine cmd) throws Exception
     {
+        String algorithm = cmd.getOptionValue("algorithm");
+        if (algorithm.equals("sub_cbc_10"))
+        {
+            if (!cmd.hasOption('t'))
+                throw new IllegalArgumentException("Missing text file path");
+            String textFilePath = cmd.getOptionValue('t');
+            String text = CommonFunctions.ReadFromFile(textFilePath);
+            if (!cmd.hasOption('v'))
+                throw new IllegalArgumentException("Missing Initial Vector file path");
+            String vectorFilePath = cmd.getOptionValue('v');
+            String vector = CommonFunctions.ReadFromFile(vectorFilePath);
+            if (!cmd.hasOption('k'))
+                throw new IllegalArgumentException("Missing key file path");
+            String keyFilePath = cmd.getOptionValue('k');
+            
+            Encryptor encryptor = new Encryptor(keyFilePath, vector);
+            String cipher = encryptor.Encrypt(text);
+            if (cmd.hasOption('o'))
+                CommonFunctions.WriteToFile(cmd.getOptionValue('o'), cipher, false);
+            else
+                System.out.println("Cipher:\n" + cipher);
+        }
     }
     
     private static Options GetCLIOptions()
