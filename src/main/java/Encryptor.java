@@ -1,3 +1,4 @@
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -21,7 +22,7 @@ public class Encryptor
         m_IV = IV;
     }
     
-    public String Encrypt(byte[] plainTextBytes)
+    public String Encrypt(byte[] plainTextBytes) throws UnsupportedEncodingException
     {
         int missingChars = m_BlockSize - plainTextBytes.length % m_BlockSize;
         byte[] result = new byte[plainTextBytes.length + missingChars];
@@ -43,6 +44,6 @@ public class Encryptor
         for (int i = plainTextBytes.length; i < plainTextBytes.length + missingChars; i++)
             result[i] = CommonFunctions.XorByte((byte) 0, result[i - m_BlockSize]);
         
-        return new String(result);
+        return new String(result,"UTF-8");
     }
 }

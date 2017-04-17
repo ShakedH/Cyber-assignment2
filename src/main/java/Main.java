@@ -59,7 +59,6 @@ public class Main
         String plainText = decryptor.DecryptByte(cipher);
         
         String algorithm = cmd.getOptionValue("algorithm");
-        
         if (algorithm.equals("sub_cbc_10"))
             if (cmd.hasOption('o'))
                 CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), plainText, false);
