@@ -41,4 +41,30 @@ public class Encryptor
         }
         return result;
     }
+    
+    public String Encrypt(byte[] plainTextBytes)
+    {
+        int missingChars = plainTextBytes.length % m_BlockSize;
+        byte[] result = new byte[plainTextBytes.length + missingChars];
+        byte[] vector = m_IV.getBytes();
+        
+        for (int i = 0; i < plainTextBytes.length; i++)
+        {
+            byte toXor;
+            if (i < m_BlockSize)
+                toXor = vector[i];
+            else
+                toXor = result[i - m_BlockSize];
+            
+            byte toAdd = CommonFunctions.XorByte(toXor, plainTextBytes[i]);
+            if (m_Key.containsKey((char) toAdd))
+                toAdd = (byte) (m_Key.get((char) toAdd).charValue());
+            result[i] = toAdd;
+        }
+        
+        for (int i = 0; i < missingChars; i++)
+            result[plainTextBytes.length + i] = (byte) 0;
+        
+        return new String(result);
+    }
 }

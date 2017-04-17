@@ -1,5 +1,6 @@
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -38,5 +39,29 @@ public class Decryptor
         String toRemove = "";
         toRemove += (char) 0;
         return StringUtils.strip(text, toRemove);
+    }
+    
+    public String DecryptByte(byte[] cipherBytes) throws UnsupportedEncodingException
+    {
+        byte[] result = new byte[cipherBytes.length];
+        byte[] vectorBytes = m_IV.getBytes();
+        for (int i = 0; i < cipherBytes.length; i++)
+        {
+            char cipherChar = (char) cipherBytes[i];
+            byte decrypted;
+            
+            if (m_ReversedKey.containsKey(cipherChar))
+                decrypted = (byte) m_ReversedKey.get(cipherChar).charValue();
+            else
+                decrypted = cipherBytes[i];
+            
+            if (i < m_BlockSize)
+                result[i] = CommonFunctions.XorByte(decrypted, vectorBytes[i]);
+            else
+                result[i] = CommonFunctions.XorByte(decrypted, cipherBytes[i - m_BlockSize]);
+        }
+        String toRemove = "";
+        toRemove += (char) 0;
+        return StringUtils.strip(new String(result), toRemove);
     }
 }

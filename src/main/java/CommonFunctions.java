@@ -58,6 +58,11 @@ public class CommonFunctions
         return sb.toString();
     }
     
+    public static byte XorByte(byte a, byte b)
+    {
+        return (byte) (a ^ b);
+    }
+    
     public static void WriteToFile(String filePath, String text, boolean append) throws IOException
     {
         File file = new File(filePath);

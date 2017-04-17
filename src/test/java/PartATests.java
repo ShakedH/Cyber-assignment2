@@ -1,5 +1,9 @@
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.FileInputStream;
+import java.io.FileReader;
 
 /**
  * Created by user on 16/04/2017.
@@ -17,7 +21,7 @@ public class PartATests
         try
         {
             Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
-            String plainText = CommonFunctions.ReadFromFile(PlainTextFilePath);
+            byte[] plainText = org.apache.commons.io.IOUtils.toByteArray(new FileReader(PlainTextFilePath));
             String cipher = encryptor.Encrypt(plainText);
             String expected = CommonFunctions.ReadFromFile(ExpectedResultFilePath);
             Assert.assertEquals(expected, cipher);
@@ -39,8 +43,8 @@ public class PartATests
         try
         {
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
-            String cipher = CommonFunctions.ReadFromFile(cipherFilePath);
-            String plainText = decryptor.Decrypt(cipher);
+            byte[] cipher = IOUtils.toByteArray(new FileReader(cipherFilePath));
+            String plainText = decryptor.DecryptByte(cipher);
             String expected = CommonFunctions.ReadFromFile(ExpectedFilePath);
             Assert.assertEquals(expected, plainText);
         } catch (Exception e)
@@ -77,5 +81,31 @@ public class PartATests
             e.printStackTrace();
             Assert.fail();
         }
+    }
+    
+    @Test
+    public void TestByteDecryption()
+    {
+        String directory = "C:\\Users\\user\\Dropbox\\לימודים\\שנה ג' סמסטר ב'\\אבטחה\\מטלה 2\\additional_examples\\PartB\\";
+        String keyFilePath = directory + "key_short.txt";
+        String fileName = "cipher";
+        String plainTextFilePath = directory + fileName + ".txt";
+        String vectorFilePath = directory + "IV_short.txt";
+        String decrypted = directory + fileName + "_dec.txt";
+        try
+        {
+            //            String givenCipher = CommonFunctions.ReadFromFile(plainTextFilePath);
+            byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(new FileInputStream(plainTextFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            
+            String decrypt = decryptor.DecryptByte(bytes);
+            CommonFunctions.WriteToFile(decrypted, decrypt, false);
+            
+            Assert.assertTrue(true);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
     }
 }

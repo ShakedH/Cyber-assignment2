@@ -4,6 +4,7 @@
 
 import org.apache.commons.cli.*;
 
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Main
@@ -51,7 +52,7 @@ public class Main
             throw new IllegalArgumentException("Missing Algorithm");
         
         String textFilePath = cmd.getOptionValue('t');
-        String text = CommonFunctions.ReadFromFile(textFilePath);
+        byte[] text = org.apache.commons.io.IOUtils.toByteArray(new FileReader(textFilePath));
         
         String vectorFilePath = cmd.getOptionValue('v');
         String vector = CommonFunctions.ReadFromFile(vectorFilePath);
@@ -59,7 +60,7 @@ public class Main
         String keyFilePath = cmd.getOptionValue('k');
         
         Decryptor decryptor = new Decryptor(keyFilePath, vector);
-        String plainText = decryptor.Decrypt(text);
+        String plainText = decryptor.DecryptByte(text);
         
         String algorithm = cmd.getOptionValue("algorithm");
         
@@ -84,7 +85,7 @@ public class Main
             throw new IllegalArgumentException("Missing Algorithm");
         
         String textFilePath = cmd.getOptionValue('t');
-        String text = CommonFunctions.ReadFromFile(textFilePath);
+        byte[] text = org.apache.commons.io.IOUtils.toByteArray(new FileReader(textFilePath));
         
         String vectorFilePath = cmd.getOptionValue('v');
         String vector = CommonFunctions.ReadFromFile(vectorFilePath);
