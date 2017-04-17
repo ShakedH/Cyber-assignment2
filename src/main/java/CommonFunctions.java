@@ -1,5 +1,4 @@
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -84,6 +83,6 @@ public class CommonFunctions
     
     public static byte[] ReadBytesFromFile(String filePath) throws Exception
     {
-        return IOUtils.toByteArray(new FileReader(filePath));
+        return org.apache.commons.io.IOUtils.toByteArray(new FileInputStream(filePath));
     }
 }

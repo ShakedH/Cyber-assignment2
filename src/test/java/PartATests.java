@@ -1,9 +1,5 @@
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.io.FileReader;
 
 /**
  * Created by user on 16/04/2017.
@@ -21,7 +17,7 @@ public class PartATests
         try
         {
             Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
-            byte[] plainText = org.apache.commons.io.IOUtils.toByteArray(new FileReader(PlainTextFilePath));
+            byte[] plainText = CommonFunctions.ReadBytesFromFile(PlainTextFilePath);
             String cipher = encryptor.Encrypt(plainText);
             String expected = CommonFunctions.ReadStringFromFile(ExpectedResultFilePath);
             Assert.assertEquals(expected, cipher);
@@ -43,7 +39,7 @@ public class PartATests
         try
         {
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
-            byte[] cipher = IOUtils.toByteArray(new FileReader(cipherFilePath));
+            byte[] cipher = CommonFunctions.ReadBytesFromFile(cipherFilePath);
             String plainText = decryptor.DecryptByte(cipher);
             String expected = CommonFunctions.ReadStringFromFile(ExpectedFilePath);
             Assert.assertEquals(expected, plainText);
@@ -66,13 +62,13 @@ public class PartATests
         String decrypted = directory + fileName + "_dec.txt";
         try
         {
-            byte[] givenPlainText = IOUtils.toByteArray(new FileReader(plainTextFilePath));
+            byte[] givenPlainText = CommonFunctions.ReadBytesFromFile(plainTextFilePath);
             Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             
             String cipher = encryptor.Encrypt(givenPlainText);
             CommonFunctions.WriteStringToFile(cipherOutput, cipher, false);
-            String decrypt = decryptor.DecryptByte(IOUtils.toByteArray(new FileReader(cipherOutput)));
+            String decrypt = decryptor.DecryptByte(CommonFunctions.ReadBytesFromFile(cipherOutput));
             CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
             Assert.assertEquals(new String(givenPlainText), decrypt);
@@ -95,7 +91,7 @@ public class PartATests
         try
         {
             //String givenCipher = CommonFunctions.ReadStringFromFile(plainTextFilePath);
-            byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(new FileInputStream(plainTextFilePath));
+            byte[] bytes = CommonFunctions.ReadBytesFromFile(plainTextFilePath);
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             
             String decrypt = decryptor.DecryptByte(bytes);
