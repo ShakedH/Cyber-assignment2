@@ -27,7 +27,7 @@ public class Attacker
     public void Attack10() throws IOException
     {
         // The following char array represents the HashMap values of the cipher key. The HashMap keys of the cipher key are constant a->h sorted
-        char[] permutation = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        char[] permutation = {'c', 'g', 'e', 'd', 'f', 'h', 'a', 'b'};
         BruteForceDecryption(permutation, 0, permutation.length - 1);
     }
     
