@@ -20,10 +20,10 @@ public class PartATests
         String ExpectedResultFilePath = directory + "cipherMsg_example.txt";
         try
         {
-            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             byte[] plainText = org.apache.commons.io.IOUtils.toByteArray(new FileReader(PlainTextFilePath));
             String cipher = encryptor.Encrypt(plainText);
-            String expected = CommonFunctions.ReadFromFile(ExpectedResultFilePath);
+            String expected = CommonFunctions.ReadStringFromFile(ExpectedResultFilePath);
             Assert.assertEquals(expected, cipher);
         } catch (Exception e)
         {
@@ -42,10 +42,10 @@ public class PartATests
         String cipherFilePath = directory + "cipherMsg_example.txt";
         try
         {
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             byte[] cipher = IOUtils.toByteArray(new FileReader(cipherFilePath));
             String plainText = decryptor.DecryptByte(cipher);
-            String expected = CommonFunctions.ReadFromFile(ExpectedFilePath);
+            String expected = CommonFunctions.ReadStringFromFile(ExpectedFilePath);
             Assert.assertEquals(expected, plainText);
         } catch (Exception e)
         {
@@ -66,16 +66,16 @@ public class PartATests
         String decrypted = directory + fileName + "_dec.txt";
         try
         {
-            String givenPlainText = CommonFunctions.ReadFromFile(plainTextFilePath);
-            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            byte[] givenPlainText = IOUtils.toByteArray(new FileReader(plainTextFilePath));
+            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             
             String cipher = encryptor.Encrypt(givenPlainText);
-            CommonFunctions.WriteToFile(cipherOutput, cipher, false);
-            String decrypt = decryptor.Decrypt(CommonFunctions.ReadFromFile(cipherOutput));
-            CommonFunctions.WriteToFile(decrypted, decrypt, false);
+            CommonFunctions.WriteStringToFile(cipherOutput, cipher, false);
+            String decrypt = decryptor.DecryptByte(IOUtils.toByteArray(new FileReader(cipherOutput)));
+            CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
-            Assert.assertEquals(givenPlainText, decrypt);
+            Assert.assertEquals(new String(givenPlainText), decrypt);
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -94,12 +94,12 @@ public class PartATests
         String decrypted = directory + fileName + "_dec.txt";
         try
         {
-            //            String givenCipher = CommonFunctions.ReadFromFile(plainTextFilePath);
+            //String givenCipher = CommonFunctions.ReadStringFromFile(plainTextFilePath);
             byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(new FileInputStream(plainTextFilePath));
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
             
             String decrypt = decryptor.DecryptByte(bytes);
-            CommonFunctions.WriteToFile(decrypted, decrypt, false);
+            CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
             Assert.assertTrue(true);
         } catch (Exception e)

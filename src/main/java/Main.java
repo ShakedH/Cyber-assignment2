@@ -55,7 +55,7 @@ public class Main
         byte[] text = org.apache.commons.io.IOUtils.toByteArray(new FileReader(textFilePath));
         
         String vectorFilePath = cmd.getOptionValue('v');
-        String vector = CommonFunctions.ReadFromFile(vectorFilePath);
+        byte[] vector = CommonFunctions.ReadBytesFromFile(vectorFilePath);
         
         String keyFilePath = cmd.getOptionValue('k');
         
@@ -66,7 +66,7 @@ public class Main
         
         if (algorithm.equals("sub_cbc_10"))
             if (cmd.hasOption('o'))
-                CommonFunctions.WriteToFile(cmd.getOptionValue('o'), plainText, false);
+                CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), plainText, false);
             else
                 System.out.println("Plain text:\n" + plainText);
         else
@@ -88,7 +88,7 @@ public class Main
         byte[] text = org.apache.commons.io.IOUtils.toByteArray(new FileReader(textFilePath));
         
         String vectorFilePath = cmd.getOptionValue('v');
-        String vector = CommonFunctions.ReadFromFile(vectorFilePath);
+        byte[] vector = CommonFunctions.ReadBytesFromFile(vectorFilePath);
         
         String keyFilePath = cmd.getOptionValue('k');
         
@@ -99,7 +99,7 @@ public class Main
         
         if (algorithm.equals("sub_cbc_10"))
             if (cmd.hasOption('o'))
-                CommonFunctions.WriteToFile(cmd.getOptionValue('o'), cipher, false);
+                CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), cipher, false);
             else
                 System.out.println("Cipher:\n" + cipher);
         else

@@ -17,8 +17,8 @@ public class Attacker
     
     public Attacker(String cipherTextPath, String ivPath, String outputPath) throws IOException
     {
-        m_CipherText = CommonFunctions.ReadFromFile(cipherTextPath);
-        m_IV = CommonFunctions.ReadFromFile(ivPath);
+        m_CipherText = CommonFunctions.ReadStringFromFile(cipherTextPath);
+        m_IV = CommonFunctions.ReadStringFromFile(ivPath);
         m_OutputPath = outputPath + "\\DecryptedCipher.txt";
     }
     
@@ -48,7 +48,7 @@ public class Attacker
                 decryptedCipher.append(decryptedSegment);
                 previousSegment = segment;
             }
-            CommonFunctions.WriteToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
+            CommonFunctions.WriteStringToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
             decryptedCipher = new StringBuilder();
             System.exit(1);
         }

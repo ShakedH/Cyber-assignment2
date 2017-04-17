@@ -1,4 +1,6 @@
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class CommonFunctions
     {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < a.length(); i++)
-            sb.append((char)(a.charAt(i) ^ b.charAt(i)));
+            sb.append((char) (a.charAt(i) ^ b.charAt(i)));
         return sb.toString();
     }
     
@@ -63,15 +65,25 @@ public class CommonFunctions
         return (byte) (a ^ b);
     }
     
-    public static void WriteToFile(String filePath, String text, boolean append) throws IOException
+    public static void WriteStringToFile(String filePath, String text, boolean append) throws IOException
     {
         File file = new File(filePath);
         FileUtils.write(file, text, "UTF-8", append);
     }
     
-    public static String ReadFromFile(String filePath) throws IOException
+    public static String ReadStringFromFile(String filePath) throws IOException
     {
         File file = new File(filePath);
         return FileUtils.readFileToString(file, "UTF-8");
+    }
+    
+    public static void WriteBinaryToFile(String filePath, byte[] text, boolean append) throws Exception
+    {
+        FileUtils.writeByteArrayToFile(new File(filePath), text, append);
+    }
+    
+    public static byte[] ReadBytesFromFile(String filePath) throws Exception
+    {
+        return IOUtils.toByteArray(new FileReader(filePath));
     }
 }
