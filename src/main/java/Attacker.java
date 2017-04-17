@@ -1,5 +1,9 @@
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -13,13 +17,14 @@ public class Attacker
     private byte[] m_CipherText;
     private byte[] m_IV;
     private String m_OutputPath;
+    private HashSet<String> m_EnglishDictionary;
     
     public Attacker(String cipherTextPath, String ivPath, String outputPath) throws Exception
     {
         m_CipherText = CommonFunctions.ReadBytesFromFile(cipherTextPath);
         m_IV = CommonFunctions.ReadBytesFromFile(ivPath);
         m_OutputPath = outputPath + "\\DecryptedCipher.txt";
-//        new HashSet<String>(FileUtils.readLines());
+        m_EnglishDictionary = new HashSet<String>(FileUtils.readLines(new File("src/main/java/EnglishDictionary.txt")));
     }
     
     public void Attack10() throws IOException
@@ -43,20 +48,20 @@ public class Attacker
             Decryptor decryptor = new Decryptor(key, m_IV);
             String decryptedSample = decryptor.DecryptByte(sample);
             System.out.println();
-//            byte previousByte = m_IV[0];
-//            for (int i = 0; i < m_CipherText.length; i++)
-//            {
-//                byte currentByte = m_CipherText[i];
-//                if (key.containsKey(currentByte))
-//
-//                String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
-//                decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousByte);
-//                decryptedCipher.append(decryptedSegment);
-//                previousByte = segment;
-//            }
-//            CommonFunctions.WriteStringToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
-//            decryptedCipher = new StringBuilder();
-//            System.exit(1);
+            //            byte previousByte = m_IV[0];
+            //            for (int i = 0; i < m_CipherText.length; i++)
+            //            {
+            //                byte currentByte = m_CipherText[i];
+            //                if (key.containsKey(currentByte))
+            //
+            //                String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
+            //                decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousByte);
+            //                decryptedCipher.append(decryptedSegment);
+            //                previousByte = segment;
+            //            }
+            //            CommonFunctions.WriteStringToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
+            //            decryptedCipher = new StringBuilder();
+            //            System.exit(1);
         }
         else
         {
