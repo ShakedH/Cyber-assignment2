@@ -1,6 +1,5 @@
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +23,7 @@ public class Attacker
         m_CipherText = CommonFunctions.ReadBytesFromFile(cipherTextPath);
         m_IV = CommonFunctions.ReadBytesFromFile(ivPath);
         m_OutputPath = outputPath + "\\DecryptedCipher.txt";
-        m_EnglishDictionary = new HashSet<String>(FileUtils.readLines(new File("src/main/java/EnglishDictionary.txt")));
+        m_EnglishDictionary = new HashSet<String>(IOUtils.readLines(ClassLoader.getSystemResourceAsStream("Dictionary")));
     }
     
     public void Attack10() throws IOException
