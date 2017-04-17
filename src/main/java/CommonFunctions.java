@@ -9,19 +9,19 @@ import java.util.Map;
  */
 public class CommonFunctions
 {
-    public static String EncryptDecryptSegmentByKey(String segment, Map<Character, Character> key)
-    {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < segment.length(); i++)
-        {
-            char current = segment.charAt(i);
-            if (key.containsKey(current))
-                result.append(key.get(current));
-            else
-                result.append(current);
-        }
-        return result.toString();
-    }
+//    public static String EncryptDecryptSegmentByKey(String segment, Map<Character, Character> key)
+//    {
+//        StringBuilder result = new StringBuilder();
+//        for (int i = 0; i < segment.length(); i++)
+//        {
+//            char current = segment.charAt(i);
+//            if (key.containsKey(current))
+//                result.append(key.get(current));
+//            else
+//                result.append(current);
+//        }
+//        return result.toString();
+//    }
     
     public static Map<Character, Character> ReadKeyFromFile(String keyFilePath) throws Exception
     {
@@ -51,14 +51,6 @@ public class CommonFunctions
         return key;
     }
     
-    public static String XOR(String a, String b)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < a.length(); i++)
-            sb.append((char) (a.charAt(i) ^ b.charAt(i)));
-        return sb.toString();
-    }
-    
     public static byte XorByte(byte a, byte b)
     {
         return (byte) (a ^ b);
@@ -74,11 +66,6 @@ public class CommonFunctions
     {
         File file = new File(filePath);
         return FileUtils.readFileToString(file, "UTF-8");
-    }
-    
-    public static void WriteBinaryToFile(String filePath, byte[] text, boolean append) throws Exception
-    {
-        FileUtils.writeByteArrayToFile(new File(filePath), text, append);
     }
     
     public static byte[] ReadBytesFromFile(String filePath) throws Exception

@@ -1,5 +1,3 @@
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,28 +7,30 @@ import java.util.Map;
  */
 public class Attacker
 {
-    private final int m_BlockSize = 10;
+    private final int BLOCK_SIZE = 10;
+    private final int SAMPLE_SIZE = 100;
     
-    private String m_CipherText;
-    private String m_IV;
+    private byte[] m_CipherText;
+    private byte[] m_IV;
     private String m_OutputPath;
     
-    public Attacker(String cipherTextPath, String ivPath, String outputPath) throws IOException
+    public Attacker(String cipherTextPath, String ivPath, String outputPath) throws Exception
     {
-        m_CipherText = CommonFunctions.ReadStringFromFile(cipherTextPath);
-        m_IV = CommonFunctions.ReadStringFromFile(ivPath);
+        m_CipherText = CommonFunctions.ReadBytesFromFile(cipherTextPath);
+        m_IV = CommonFunctions.ReadBytesFromFile(ivPath);
         m_OutputPath = outputPath + "\\DecryptedCipher.txt";
+//        new HashSet<String>(FileUtils.readLines());
     }
     
     public void Attack10() throws IOException
     {
         // The following char array represents the HashMap values of the cipher key. The HashMap keys of the cipher key are constant a->h sorted
-        char[] permutation = {'c', 'g', 'e', 'd', 'f', 'h', 'a', 'b'};
-        StringBuilder decryptedCipher = new StringBuilder();
+        char[] permutation = {'g', 'h', 'a', 'd', 'c', 'e', 'b', 'f'};
+        byte[] decryptedCipher = new byte[SAMPLE_SIZE];
         BruteForceDecryption(permutation, 0, permutation.length - 1, decryptedCipher);
     }
     
-    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, StringBuilder decryptedCipher) throws IOException
+    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex, byte[] decryptedCipher) throws IOException
     {
         if (startIndex == endIndex)     // A permutation is reached
         {
@@ -38,19 +38,25 @@ public class Attacker
             for (int i = 0; i < permutation.length; i++)
                 key.put((char)(i + 97), permutation[i]);
             
-            String previousSegment = m_IV;
-            for (int i = 0; i < m_CipherText.length(); i += m_BlockSize)
-            {
-                String segment = m_CipherText.substring(i, Math.min(i + m_BlockSize, m_CipherText.length()));
-                segment += StringUtils.repeat((char)0, m_BlockSize - segment.length());
-                String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
-                decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousSegment);
-                decryptedCipher.append(decryptedSegment);
-                previousSegment = segment;
-            }
-            CommonFunctions.WriteStringToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
-            decryptedCipher = new StringBuilder();
-            System.exit(1);
+            byte[] sample = new byte[SAMPLE_SIZE];
+            System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
+            Decryptor decryptor = new Decryptor(key, m_IV);
+            String decryptedSample = decryptor.DecryptByte(sample);
+            System.out.println();
+//            byte previousByte = m_IV[0];
+//            for (int i = 0; i < m_CipherText.length; i++)
+//            {
+//                byte currentByte = m_CipherText[i];
+//                if (key.containsKey(currentByte))
+//
+//                String decryptedSegment = CommonFunctions.EncryptDecryptSegmentByKey(segment, key);
+//                decryptedSegment = CommonFunctions.XOR(decryptedSegment, previousByte);
+//                decryptedCipher.append(decryptedSegment);
+//                previousByte = segment;
+//            }
+//            CommonFunctions.WriteStringToFile(m_OutputPath, "\n" + new String(permutation) + "\n" + decryptedCipher + "\n", true);
+//            decryptedCipher = new StringBuilder();
+//            System.exit(1);
         }
         else
         {

@@ -4,8 +4,6 @@
 
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
-
 public class Main
 {
     public static void main(String[] args)
@@ -30,6 +28,8 @@ public class Main
         } catch (Exception e)
         {
             System.out.println(e.getMessage());
+            // TODO: 17-Apr-17
+            e.printStackTrace();
             if (e instanceof ParseException)
                 helpFormatter.printHelp("Cyber", options);
             System.exit(1);
@@ -102,7 +102,7 @@ public class Main
             throw new IllegalArgumentException("Unknown Algorithm.");
     }
     
-    private static void Attack(CommandLine cmd) throws IOException
+    private static void Attack(CommandLine cmd) throws Exception
     {
         // Arguments validity check
         if (!cmd.hasOption('a'))
