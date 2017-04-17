@@ -24,6 +24,7 @@ public class Attacker
         m_IV = CommonFunctions.ReadBytesFromFile(ivPath);
         m_OutputPath = outputPath + "\\DecryptedCipher.txt";
         m_EnglishDictionary = new HashSet<String>(IOUtils.readLines(ClassLoader.getSystemResourceAsStream("Dictionary")));
+        System.out.println(m_EnglishDictionary.size());
     }
     
     public void Attack10() throws IOException
@@ -46,7 +47,6 @@ public class Attacker
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
             Decryptor decryptor = new Decryptor(key, m_IV);
             String decryptedSample = decryptor.DecryptByte(sample);
-            System.out.println();
             //            byte previousByte = m_IV[0];
             //            for (int i = 0; i < m_CipherText.length; i++)
             //            {
