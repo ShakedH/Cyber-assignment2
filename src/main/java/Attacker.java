@@ -37,7 +37,7 @@ public class Attacker
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
             for (int i = 0; i < permutation.length; i++)
-                key.put((char)(i + 97), permutation[i]);
+                key.put((char) (i + 97), permutation[i]);
             
             byte[] sample = new byte[SAMPLE_SIZE];
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
@@ -47,6 +47,8 @@ public class Attacker
             int errorCounter = 0;
             for (String word : splittedSample)
             {
+                if (word.matches(".*\\d.*"))
+                    continue;
                 if (!m_EnglishDictionary.contains(word.toLowerCase()))
                     errorCounter++;
                 if (errorCounter > ERROR_THRESHOLD)
