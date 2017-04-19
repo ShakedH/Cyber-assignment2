@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class Attacker
+public class Attacker10
 {
     private final int SAMPLE_SIZE = 1000;
     
@@ -16,7 +16,7 @@ public class Attacker
     private String m_OutputPath;
     private HashSet<String> m_EnglishDictionary;
     
-    public Attacker(String cipherTextPath, String ivPath, String outputPath) throws Exception
+    public Attacker10(String cipherTextPath, String ivPath, String outputPath) throws Exception
     {
         m_CipherText = CommonFunctions.ReadBytesFromFile(cipherTextPath);
         m_IV = CommonFunctions.ReadBytesFromFile(ivPath);
@@ -24,7 +24,7 @@ public class Attacker
         m_EnglishDictionary = new HashSet<String>(IOUtils.readLines(ClassLoader.getSystemResourceAsStream("Dictionary")));
     }
     
-    public void Attack10() throws IOException
+    public void Attack() throws IOException
     {
         BruteForceDecryption("", "abcdefgh");
         WriteKeyToFile(m_MinKey);
@@ -73,10 +73,5 @@ public class Attacker
         for (Character c : key.keySet())
             output += c + " " + key.get(c) + "\n";
         CommonFunctions.WriteStringToFile(m_OutputPath, output, false);
-    }
-    
-    public void Attack52()
-    {
-    
     }
 }

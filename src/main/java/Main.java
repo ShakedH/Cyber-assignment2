@@ -125,11 +125,24 @@ public class Main
         String ivPath = cmd.getOptionValue("vector");
         String outputPath = cmd.getOptionValue("output");
         
-        Attacker attacker = new Attacker(cipherTextPath, ivPath, outputPath);
         if (algorithm.equals("sub_cbc_10"))
-            attacker.Attack10();
+        {
+            Attacker10 attacker10 = new Attacker10(cipherTextPath, ivPath, outputPath);
+            attacker10.Attack();
+        }
         else if (algorithm.equals("sub_cbc_52"))
-            attacker.Attack52();
+        {
+            if (!cmd.hasOption("kp"))
+                throw new IllegalArgumentException("Missing known plain text path");
+            if (!cmd.hasOption("kc"))
+                throw new IllegalArgumentException("Missing known cipher path");
+            
+            String knownPlainText = cmd.getOptionValue("KnownPlainText");
+            String knownCipherText = cmd.getOptionValue("KnownCipherText");
+            
+            Attacker52 attacker52 = new Attacker52(cipherTextPath, knownPlainText, knownCipherText, ivPath, outputPath);
+            attacker52.Attack();
+        }
         else
             throw new IllegalArgumentException("Invalid algorithm. Algorithm must be 'sub_cbc_10' or 'sub_cbc_52'");
     }
