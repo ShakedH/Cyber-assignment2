@@ -10,12 +10,6 @@ public class Encryptor
     private byte[] m_IV;
     private final int m_BlockSize = 10;
     
-    public Encryptor(Map<Character, Character> key, byte[] IV)
-    {
-        m_Key = key;
-        m_IV = IV;
-    }
-    
     public Encryptor(String keyFilePath, byte[] IV) throws Exception
     {
         m_Key = CommonFunctions.ReadKeyFromFile(keyFilePath);
