@@ -8,7 +8,7 @@ public class Encryptor
 {
     private Map<Character, Character> m_Key;
     private byte[] m_IV;
-    private int m_BlockSize = 10;
+    private int m_BlockSize;
     
     public Encryptor(String keyFilePath, byte[] IV, int blockSize) throws Exception
     {

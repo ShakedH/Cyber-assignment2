@@ -41,7 +41,7 @@ public class PartATests
         {
             Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
             byte[] cipher = CommonFunctions.ReadBytesFromFile(cipherFilePath);
-            String plainText = decryptor.DecryptByte(cipher);
+            String plainText = decryptor.Decrypt(cipher);
             String expected = CommonFunctions.ReadStringFromFile(ExpectedFilePath);
             Assert.assertEquals(expected, plainText);
         }
@@ -70,7 +70,7 @@ public class PartATests
             
             String cipher = encryptor.Encrypt(givenPlainText);
             CommonFunctions.WriteStringToFile(cipherOutput, cipher, false);
-            String decrypt = decryptor.DecryptByte(CommonFunctions.ReadBytesFromFile(cipherOutput));
+            String decrypt = decryptor.Decrypt(CommonFunctions.ReadBytesFromFile(cipherOutput));
             CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
             Assert.assertEquals(new String(givenPlainText), decrypt);
@@ -80,32 +80,5 @@ public class PartATests
             e.printStackTrace();
             Assert.fail();
         }
-    }
-    
-    @Test
-    public void TestByteDecryption()
-    {
-        String directory = "C:\\Users\\user\\Dropbox\\לימודים\\שנה ג' סמסטר ב'\\אבטחה\\מטלה 2\\additional_examples\\PartB\\";
-        String keyFilePath = directory + "key_short.txt";
-        String fileName = "cipher";
-        String plainTextFilePath = directory + fileName + ".txt";
-        String vectorFilePath = directory + "IV_short.txt";
-        String decrypted = directory + fileName + "_dec.txt";
-        try
-        {
-            //String givenCipher = CommonFunctions.ReadStringFromFile(plainTextFilePath);
-            byte[] bytes = CommonFunctions.ReadBytesFromFile(plainTextFilePath);
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
-            
-            String decrypt = decryptor.DecryptByte(bytes);
-            CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
-            
-            Assert.assertTrue(true);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
     }
 }

@@ -65,7 +65,7 @@ public class Main
         
         String keyFilePath = cmd.getOptionValue('k');
         Decryptor decryptor = new Decryptor(keyFilePath, vector, blockSize);
-        String plainText = decryptor.DecryptByte(cipher);
+        String plainText = decryptor.Decrypt(cipher);
         if (cmd.hasOption('o'))
             CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), plainText, false);
         else
