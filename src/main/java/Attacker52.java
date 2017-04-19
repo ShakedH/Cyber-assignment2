@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,14 @@ public class Attacker52
                 continue;
             if (!m_Key.containsKey(xorResult))
                 m_Key.put(xorResult, (char) m_KnownCipherText[i]);
+        }
+        // FIXME: 19/04/2017 remove this
+        try
+        {
+            CommonFunctions.WriteKeyToFile(m_Key, m_OutputPath);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
