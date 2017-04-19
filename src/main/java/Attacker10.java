@@ -27,7 +27,7 @@ public class Attacker10
     public void Attack() throws IOException
     {
         BruteForceDecryption("", "abcdefgh");
-        WriteKeyToFile(m_MinKey);
+        CommonFunctions.WriteKeyToFile(m_MinKey, m_OutputPath);
     }
     
     private void BruteForceDecryption(String prefix, String permutation) throws IOException
@@ -37,7 +37,7 @@ public class Attacker10
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
             for (int i = 0; i < prefix.length(); i++)
-                key.put((char)(i + 97), prefix.charAt(i));
+                key.put((char) (i + 97), prefix.charAt(i));
             
             byte[] sample = new byte[SAMPLE_SIZE];
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
@@ -65,13 +65,5 @@ public class Attacker10
             for (int i = 0; i < n; i++)
                 BruteForceDecryption(prefix + permutation.charAt(i), permutation.substring(0, i) + permutation.substring(i + 1, n));
         }
-    }
-    
-    private void WriteKeyToFile(Map<Character, Character> key) throws IOException
-    {
-        String output = "";
-        for (Character c : key.keySet())
-            output += c + " " + key.get(c) + "\n";
-        CommonFunctions.WriteStringToFile(m_OutputPath, output, false);
     }
 }

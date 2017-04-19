@@ -20,9 +20,17 @@ public class CommonFunctions
         return key;
     }
     
+    public static void WriteKeyToFile(Map<Character, Character> key, String outputPath) throws IOException
+    {
+        String output = "";
+        for (Character c : key.keySet())
+            output += c + " " + key.get(c) + "\n";
+        CommonFunctions.WriteStringToFile(outputPath, output, false);
+    }
+    
     public static byte XorByte(byte a, byte b)
     {
-        return (byte)(a ^ b);
+        return (byte) (a ^ b);
     }
     
     public static void WriteStringToFile(String filePath, String text, boolean append) throws IOException

@@ -27,12 +27,11 @@ public class Attacker52
     {
         for (int i = 0; i < m_KnownPlainText.length; i++)
         {
-            char xorResult = (char)CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
-            // TODO: 19-Apr-17 Only English letters
-            if (!Character.isLetter(xorResult))
+            char xorResult = (char) CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
+            if (!((xorResult >= 'a' && xorResult <= 'z') || (xorResult >= 'A' && xorResult <= 'Z')))
                 continue;
             if (!m_Key.containsKey(xorResult))
-                m_Key.put(xorResult, (char)m_KnownCipherText[i]);
+                m_Key.put(xorResult, (char) m_KnownCipherText[i]);
         }
     }
 }
