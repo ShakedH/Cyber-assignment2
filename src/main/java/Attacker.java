@@ -1,7 +1,6 @@
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,11 +8,9 @@ import java.util.Map;
 public class Attacker
 {
     private final int SAMPLE_SIZE = 1000;
-    private final int ERROR_THRESHOLD = SAMPLE_SIZE / 200;
     
-    private int m_MinKeyOccurrences = Integer.MAX_VALUE;
+    private int m_MinKeyErrors = Integer.MAX_VALUE;
     private Map<Character, Character> m_MinKey;
-    
     private byte[] m_CipherText;
     private byte[] m_IV;
     private String m_OutputPath;
@@ -29,10 +26,8 @@ public class Attacker
     
     public void Attack10() throws IOException
     {
-        long startTime = System.currentTimeMillis();
-        BruteForceDecryption("", "cgadfbeh");
-        WriteKeyToFile(m_MinKey.values());
-        System.out.println((System.currentTimeMillis() - startTime) / 1000.0);
+        BruteForceDecryption("", "abcdefgh");
+        WriteKeyToFile(m_MinKey);
     }
     
     private void BruteForceDecryption(String prefix, String permutation) throws IOException
@@ -56,12 +51,12 @@ public class Attacker
                     continue;
                 if (!m_EnglishDictionary.contains(word.toLowerCase()))
                     errorCounter++;
-                if (errorCounter > m_MinKeyOccurrences)
+                if (errorCounter > m_MinKeyErrors)
                     return;
             }
-            if (errorCounter < m_MinKeyOccurrences)
+            if (errorCounter < m_MinKeyErrors)
             {
-                m_MinKeyOccurrences = errorCounter;
+                m_MinKeyErrors = errorCounter;
                 m_MinKey = key;
             }
         }
@@ -72,9 +67,12 @@ public class Attacker
         }
     }
     
-    private void WriteKeyToFile(Collection<Character> key) throws IOException
+    private void WriteKeyToFile(Map<Character, Character> key) throws IOException
     {
-        CommonFunctions.WriteStringToFile(m_OutputPath, key.toString() + "\n", true);
+        String output = "";
+        for (Character c : key.keySet())
+            output += c + " " + key.get(c) + "\n";
+        CommonFunctions.WriteStringToFile(m_OutputPath, output, false);
     }
     
     public void Attack52()
