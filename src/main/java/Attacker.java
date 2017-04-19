@@ -9,7 +9,10 @@ import java.util.Map;
 public class Attacker
 {
     private final int SAMPLE_SIZE = 1000;
-    private final int ERROR_THRESHOLD = SAMPLE_SIZE / 65;
+    private final int ERROR_THRESHOLD = SAMPLE_SIZE / 200;
+    
+    private int m_MinKeyOccurrences = Integer.MAX_VALUE;
+    private Map<Character, Character> m_MinKey;
     
     private byte[] m_CipherText;
     private byte[] m_IV;
@@ -26,24 +29,26 @@ public class Attacker
     
     public void Attack10() throws IOException
     {
-        // The following char array represents the HashMap values of the cipher key. The HashMap keys of the cipher key are constant a->h sorted
-        char[] permutation = {'c', 'g', 'e', 'd', 'f', 'h', 'a', 'b'};
-        BruteForceDecryption(permutation, 0, permutation.length - 1);
+        long startTime = System.currentTimeMillis();
+        BruteForceDecryption("", "cgadfbeh");
+        WriteKeyToFile(m_MinKey.values());
+        System.out.println((System.currentTimeMillis() - startTime) / 1000.0);
     }
     
-    private void BruteForceDecryption(char[] permutation, int startIndex, int endIndex) throws IOException
+    private void BruteForceDecryption(String prefix, String permutation) throws IOException
     {
-        if (startIndex == endIndex)     // A permutation is reached
+        int n = permutation.length();
+        if (n == 0)     // A permutation is reached
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
-            for (int i = 0; i < permutation.length; i++)
-                key.put((char) (i + 97), permutation[i]);
+            for (int i = 0; i < prefix.length(); i++)
+                key.put((char)(i + 97), prefix.charAt(i));
             
             byte[] sample = new byte[SAMPLE_SIZE];
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
             Decryptor decryptor = new Decryptor(key, m_IV);
             String decryptedSample = decryptor.DecryptByte(sample);
-            String[] splittedSample = decryptedSample.split("\\W+");
+            String[] splittedSample = decryptedSample.split("[\\.,\\s!;?:&\"\\[\\]]+");
             int errorCounter = 0;
             for (String word : splittedSample)
             {
@@ -51,32 +56,25 @@ public class Attacker
                     continue;
                 if (!m_EnglishDictionary.contains(word.toLowerCase()))
                     errorCounter++;
-                if (errorCounter > ERROR_THRESHOLD)
+                if (errorCounter > m_MinKeyOccurrences)
                     return;
             }
-            WriteKeyToFile(key.values());
+            if (errorCounter < m_MinKeyOccurrences)
+            {
+                m_MinKeyOccurrences = errorCounter;
+                m_MinKey = key;
+            }
         }
         else
         {
-            for (int i = startIndex; i < endIndex; i++)
-            {
-                swap(permutation, startIndex, i);
-                BruteForceDecryption(permutation, startIndex + 1, endIndex);
-                swap(permutation, startIndex, i);
-            }
+            for (int i = 0; i < n; i++)
+                BruteForceDecryption(prefix + permutation.charAt(i), permutation.substring(0, i) + permutation.substring(i + 1, n));
         }
     }
     
     private void WriteKeyToFile(Collection<Character> key) throws IOException
     {
         CommonFunctions.WriteStringToFile(m_OutputPath, key.toString() + "\n", true);
-    }
-    
-    private void swap(char[] array, int a, int b)
-    {
-        char temp = array[a];
-        array[a] = array[b];
-        array[b] = temp;
     }
     
     public void Attack52()
