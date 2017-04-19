@@ -25,7 +25,8 @@ public class Main
                 Attack(cmd);
             else
                 throw new IllegalArgumentException("Unknown Command");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             System.out.println(e.getMessage());
             // TODO: 17-Apr-17
@@ -53,19 +54,22 @@ public class Main
         String vectorFilePath = cmd.getOptionValue('v');
         byte[] vector = CommonFunctions.ReadBytesFromFile(vectorFilePath);
         
-        String keyFilePath = cmd.getOptionValue('k');
-        
-        Decryptor decryptor = new Decryptor(keyFilePath, vector);
-        String plainText = decryptor.DecryptByte(cipher);
-        
         String algorithm = cmd.getOptionValue("algorithm");
+        int blockSize;
         if (algorithm.equals("sub_cbc_10"))
-            if (cmd.hasOption('o'))
-                CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), plainText, false);
-            else
-                System.out.println("Plain text:\n" + plainText);
+            blockSize = 10;
+        else if (algorithm.equals("sub_cbc_52"))
+            blockSize = 52;
         else
             throw new IllegalArgumentException("Unknown Algorithm.");
+        
+        String keyFilePath = cmd.getOptionValue('k');
+        Decryptor decryptor = new Decryptor(keyFilePath, vector, blockSize);
+        String plainText = decryptor.DecryptByte(cipher);
+        if (cmd.hasOption('o'))
+            CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), plainText, false);
+        else
+            System.out.println("Plain Text:\n" + plainText);
     }
     
     private static void Encrypt(CommandLine cmd) throws Exception
@@ -85,20 +89,23 @@ public class Main
         String vectorFilePath = cmd.getOptionValue('v');
         byte[] vector = CommonFunctions.ReadBytesFromFile(vectorFilePath);
         
-        String keyFilePath = cmd.getOptionValue('k');
-        
-        Encryptor encryptor = new Encryptor(keyFilePath, vector);
-        String cipher = encryptor.Encrypt(plainText);
-        
         String algorithm = cmd.getOptionValue("algorithm");
-        
+        int blockSize;
         if (algorithm.equals("sub_cbc_10"))
-            if (cmd.hasOption('o'))
-                CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), cipher, false);
-            else
-                System.out.println("Cipher:\n" + cipher);
+            blockSize = 10;
+        else if (algorithm.equals("sub_cbc_52"))
+            blockSize = 52;
         else
             throw new IllegalArgumentException("Unknown Algorithm.");
+        
+        String keyFilePath = cmd.getOptionValue('k');
+        Encryptor encryptor = new Encryptor(keyFilePath, vector, blockSize);
+        String cipher = encryptor.Encrypt(plainText);
+        
+        if (cmd.hasOption('o'))
+            CommonFunctions.WriteStringToFile(cmd.getOptionValue('o'), cipher, false);
+        else
+            System.out.println("Cipher:\n" + cipher);
     }
     
     private static void Attack(CommandLine cmd) throws Exception

@@ -8,18 +8,20 @@ public class Decryptor
 {
     private Map<Character, Character> m_ReversedKey;
     private byte[] m_IV;
-    private final int m_BlockSize = 10;
+    private int m_BlockSize = 10;
     
-    public Decryptor(Map<Character, Character> key, byte[] IV)
+    public Decryptor(Map<Character, Character> key, byte[] IV, int blockSize)
     {
         m_ReversedKey = ReverseKey(key);
         m_IV = IV;
+        m_BlockSize = blockSize;
     }
     
-    public Decryptor(String keyFilePath, byte[] IV) throws Exception
+    public Decryptor(String keyFilePath, byte[] IV, int blockSize) throws Exception
     {
         m_ReversedKey = ReverseKey(CommonFunctions.ReadKeyFromFile(keyFilePath));
         m_IV = IV;
+        m_BlockSize = blockSize;
     }
     
     public String DecryptByte(byte[] cipherBytes) throws UnsupportedEncodingException

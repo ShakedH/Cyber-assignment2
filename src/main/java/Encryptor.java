@@ -8,12 +8,13 @@ public class Encryptor
 {
     private Map<Character, Character> m_Key;
     private byte[] m_IV;
-    private final int m_BlockSize = 10;
+    private int m_BlockSize = 10;
     
-    public Encryptor(String keyFilePath, byte[] IV) throws Exception
+    public Encryptor(String keyFilePath, byte[] IV, int blockSize) throws Exception
     {
         m_Key = CommonFunctions.ReadKeyFromFile(keyFilePath);
         m_IV = IV;
+        m_BlockSize = blockSize;
     }
     
     public String Encrypt(byte[] plainTextBytes) throws UnsupportedEncodingException
@@ -28,16 +29,16 @@ public class Encryptor
             
             byte toAdd = CommonFunctions.XorByte(toXor, plainTextBytes[i]);
             
-            if (m_Key.containsKey((char) toAdd))
-                toAdd = (byte) (m_Key.get((char) toAdd).charValue());
+            if (m_Key.containsKey((char)toAdd))
+                toAdd = (byte)(m_Key.get((char)toAdd).charValue());
             
             result[i] = toAdd;
         }
         
         // Add 0 padding:
         for (int i = plainTextBytes.length; i < plainTextBytes.length + missingChars; i++)
-            result[i] = CommonFunctions.XorByte((byte) 0, result[i - m_BlockSize]);
+            result[i] = CommonFunctions.XorByte((byte)0, result[i - m_BlockSize]);
         
-        return new String(result,"UTF-8");
+        return new String(result, "UTF-8");
     }
 }

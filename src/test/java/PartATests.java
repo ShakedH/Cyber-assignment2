@@ -16,12 +16,13 @@ public class PartATests
         String ExpectedResultFilePath = directory + "cipherMsg_example.txt";
         try
         {
-            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
+            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
             byte[] plainText = CommonFunctions.ReadBytesFromFile(PlainTextFilePath);
             String cipher = encryptor.Encrypt(plainText);
             String expected = CommonFunctions.ReadStringFromFile(ExpectedResultFilePath);
             Assert.assertEquals(expected, cipher);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             Assert.fail();
@@ -38,12 +39,13 @@ public class PartATests
         String cipherFilePath = directory + "cipherMsg_example.txt";
         try
         {
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
             byte[] cipher = CommonFunctions.ReadBytesFromFile(cipherFilePath);
             String plainText = decryptor.DecryptByte(cipher);
             String expected = CommonFunctions.ReadStringFromFile(ExpectedFilePath);
             Assert.assertEquals(expected, plainText);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             Assert.fail();
@@ -63,8 +65,8 @@ public class PartATests
         try
         {
             byte[] givenPlainText = CommonFunctions.ReadBytesFromFile(plainTextFilePath);
-            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
+            Encryptor encryptor = new Encryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
             
             String cipher = encryptor.Encrypt(givenPlainText);
             CommonFunctions.WriteStringToFile(cipherOutput, cipher, false);
@@ -72,7 +74,8 @@ public class PartATests
             CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
             Assert.assertEquals(new String(givenPlainText), decrypt);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             Assert.fail();
@@ -92,13 +95,14 @@ public class PartATests
         {
             //String givenCipher = CommonFunctions.ReadStringFromFile(plainTextFilePath);
             byte[] bytes = CommonFunctions.ReadBytesFromFile(plainTextFilePath);
-            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath));
+            Decryptor decryptor = new Decryptor(keyFilePath, CommonFunctions.ReadBytesFromFile(vectorFilePath), 10);
             
             String decrypt = decryptor.DecryptByte(bytes);
             CommonFunctions.WriteStringToFile(decrypted, decrypt, false);
             
             Assert.assertTrue(true);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }

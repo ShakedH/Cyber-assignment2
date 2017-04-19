@@ -41,7 +41,7 @@ public class Attacker
             
             byte[] sample = new byte[SAMPLE_SIZE];
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
-            Decryptor decryptor = new Decryptor(key, m_IV);
+            Decryptor decryptor = new Decryptor(key, m_IV, 10);
             String decryptedSample = decryptor.DecryptByte(sample);
             String[] splittedSample = decryptedSample.split("[\\.,\\s!;?:&\"\\[\\]]+");
             int errorCounter = 0;
