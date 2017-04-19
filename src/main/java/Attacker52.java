@@ -28,6 +28,7 @@ public class Attacker52
         for (int i = 0; i < m_KnownPlainText.length; i++)
         {
             char xorResult = (char)CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
+            // TODO: 19-Apr-17 Only English letters
             if (!Character.isLetter(xorResult))
                 continue;
             if (!m_Key.containsKey(xorResult))
