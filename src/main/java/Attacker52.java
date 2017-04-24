@@ -21,7 +21,15 @@ public class Attacker52
         m_Key = new HashMap<Character, Character>();
     }
     
-    public void Attack()
+    public void Attack() throws Exception
+    {
+        BuildKeyFromKnownTexts();
+        CompleteMissingCharsInKey();
+        DecryptCipherText();
+        CommonFunctions.WriteKeyToFile(m_Key, m_OutputPath);
+    }
+    
+    private void BuildKeyFromKnownTexts()
     {
         for (int i = 0; i < m_KnownPlainText.length; i++)
         {
@@ -40,9 +48,6 @@ public class Attacker52
         {
             e.printStackTrace();
         }
-        
-        CompleteMissingCharsInKey();
-        DecryptCipherText();
     }
     
     private void CompleteMissingCharsInKey()
@@ -50,8 +55,13 @@ public class Attacker52
     
     }
     
-    private void DecryptCipherText()
+    private void DecryptCipherText() throws Exception
     {
-    
+        int SAMPLE_SIZE = 1000;
+        byte[] sample = new byte[SAMPLE_SIZE];
+        System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);
+        Decryptor decryptor = new Decryptor(m_Key, m_IV, 52);
+        String decryptedSample = decryptor.Decrypt(sample);
+        System.out.println(decryptedSample);
     }
 }
