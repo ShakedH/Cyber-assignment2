@@ -47,7 +47,7 @@ public class Attacker10
             int errorCounter = 0;
             for (String word : splittedSample)
             {
-                if (word.matches(".*\\d.*"))
+                if (word.matches(".*\\d.*"))    // 'word' is a number
                     continue;
                 if (!m_EnglishDictionary.contains(word.toLowerCase()))
                     errorCounter++;

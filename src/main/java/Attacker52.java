@@ -2,9 +2,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Ron Michaeli on 19-Apr-17.
- */
 public class Attacker52
 {
     private byte[] m_CipherText;
@@ -28,19 +25,33 @@ public class Attacker52
     {
         for (int i = 0; i < m_KnownPlainText.length; i++)
         {
-            char xorResult = (char) CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
-            if (!((xorResult >= 'a' && xorResult <= 'z') || (xorResult >= 'A' && xorResult <= 'Z')))
+            char xorResult = (char)CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
+            if (!((xorResult >= 'a' && xorResult <= 'z') || (xorResult >= 'A' && xorResult <= 'Z')))    // Not an English letter
                 continue;
             if (!m_Key.containsKey(xorResult))
-                m_Key.put(xorResult, (char) m_KnownCipherText[i]);
+                m_Key.put(xorResult, (char)m_KnownCipherText[i]);
         }
         // FIXME: 19/04/2017 remove this
         try
         {
             CommonFunctions.WriteKeyToFile(m_Key, m_OutputPath);
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
+        
+        CompleteMissingCharsInKey();
+        DecryptCipherText();
+    }
+    
+    private void CompleteMissingCharsInKey()
+    {
+    
+    }
+    
+    private void DecryptCipherText()
+    {
+    
     }
 }
