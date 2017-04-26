@@ -81,9 +81,9 @@ public class Attacker52
         while (m_Key.keySet().size() < 52)
         {
             int index = 0;
-            m_ReversedKey = MapUtils.invertMap(m_Key);
             while (index < m_CipherText.length)
             {
+                m_ReversedKey = MapUtils.invertMap(m_Key);
                 Pair<String, Integer> nextWord = getNextWord(index);
                 if (nextWord.getValue() != -1)
                     ReplaceUnknownChar(nextWord.getKey(), nextWord.getValue(), index + nextWord.getValue());
@@ -99,8 +99,6 @@ public class Attacker52
         boolean moreThanOneUnknown = false;
         for (int i = startFrom; i < m_CipherText.length; i++)
         {
-            if (i == 2711)
-                System.out.println();
             char c = (char) m_CipherText[i];
             if (m_ReversedKey.containsKey(c))
             {
@@ -158,10 +156,10 @@ public class Attacker52
         if (matchingChar == 0)
             return;
         
-//        if (absoluteIndex < m_IV.length)
-//            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_IV[absoluteIndex]);
-//        else
-//            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_CipherText[absoluteIndex - m_IV.length]);
+        //        if (absoluteIndex < m_IV.length)
+        //            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_IV[absoluteIndex]);
+        //        else
+        //            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_CipherText[absoluteIndex - m_IV.length]);
         
         m_Key.put(matchingChar, (char) m_CipherText[absoluteIndex]);
     }
