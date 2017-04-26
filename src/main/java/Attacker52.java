@@ -1,3 +1,4 @@
+import javafx.util.Pair;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -77,46 +78,115 @@ public class Attacker52
     
     private void CompleteMissingCharsInKey()
     {
-        m_StartOfCurrentWord = 0;
-        while (m_Key.keySet().size() != 52)
+        while (m_Key.keySet().size() < 52)
         {
-            String word = getNextWord(m_StartOfCurrentWord);
-            if (word.length() > 1)
+            int index = 0;
+            m_ReversedKey = MapUtils.invertMap(m_Key);
+            while (index < m_CipherText.length)
             {
-                System.out.println(word);
-                int numOfUnknownIndexes = CountUnknownIndexes(word);
+                Pair<String, Integer> nextWord = getNextWord(index);
+                if (nextWord.getValue() != -1)
+                    ReplaceUnknownChar(nextWord.getKey(), nextWord.getValue(), index + nextWord.getValue());
+                index += nextWord.getKey().length() + 1;
             }
-//            if (numOfUnknownIndexes == 1)
-//            {
-//                int index = getUnknownIndex(word);
-//                AnalyzeWord(word, index);
-//            }
-            m_StartOfCurrentWord += word.length() + 1;
-            
-            //            m_ReversedKey = MapUtils.invertMap(m_Key);
-            //            while (index < m_CipherText.length)
-            //                index = AnalyzeWordFrom(index);
         }
     }
     
+    private Pair<String, Integer> getNextWord(int startFrom)
+    {
+        StringBuilder word = new StringBuilder();
+        int unknownCharIndex = -1;
+        boolean moreThanOneUnknown = false;
+        for (int i = startFrom; i < m_CipherText.length; i++)
+        {
+            if (i == 2711)
+                System.out.println();
+            char c = (char) m_CipherText[i];
+            if (m_ReversedKey.containsKey(c))
+            {
+                c = m_ReversedKey.get(c);
+                c = XorChars(c, i);
+            }
+            else if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z'))  // c is not English letter
+            {
+                c = XorChars(c, i);
+                if (Pattern.matches("[\\.,\\s!;?:&\"\\[\\]]+", c + ""))     // c is a delimiter
+                    break;
+            }
+            else    // c is not in key and is English letter
+            {
+                if (unknownCharIndex != -1)
+                    moreThanOneUnknown = true;
+                unknownCharIndex = i - startFrom;
+            }
+            word.append(c);
+        }
+        if (moreThanOneUnknown)
+            return new Pair<String, Integer>(word.toString(), -1);
+        return new Pair<String, Integer>(word.toString(), unknownCharIndex);
+    }
+    
+    private char XorChars(char c, int index)
+    {
+        if (index < m_IV.length)
+            return (char) CommonFunctions.XorByte((byte) c, m_IV[index]);
+        return (char) CommonFunctions.XorByte((byte) c, m_CipherText[index - m_IV.length]);
+    }
+    
+    private void ReplaceUnknownChar(String word, int unknownCharIndex, int absoluteIndex)
+    {
+        StringBuilder tempWord = new StringBuilder(word);
+        int matchesWithDictionary = 0;
+        char c = unknownCharIndex == 0 ? 'A' : 'a';
+        char matchingChar = 0;
+        for (; c <= 'z'; c++)
+        {
+            char xored = XorChars(c, absoluteIndex);
+            if (!m_Key.containsKey(xored) && (xored >= 'a' || xored <= 'Z'))
+            {
+                tempWord.setCharAt(unknownCharIndex, c);
+                if (m_EnglishDictionary.contains(tempWord.toString().toLowerCase()))
+                {
+                    if (matchesWithDictionary == 1)
+                        return;
+                    matchesWithDictionary++;
+                    matchingChar = xored;
+                }
+            }
+        }
+        
+        if (matchingChar == 0)
+            return;
+        
+//        if (absoluteIndex < m_IV.length)
+//            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_IV[absoluteIndex]);
+//        else
+//            matchingChar = (char) CommonFunctions.XorByte((byte) matchingChar, m_CipherText[absoluteIndex - m_IV.length]);
+        
+        m_Key.put(matchingChar, (char) m_CipherText[absoluteIndex]);
+    }
+    
+    //region Irrelevant
     private void AnalyzeWord(String word, int index)
     {
         StringBuilder sb = new StringBuilder(word);
         
         byte byteInCipher = m_CipherText[m_StartOfCurrentWord + index];
+        int indexInCipher = m_StartOfCurrentWord + index;
         
         for (char c = 'A'; c <= 'z'; c++)
         {
-            if (c > 'Z' && c < 'a')
+            if (c > 'Z' && c < 'a' || m_Key.containsKey(c))
                 continue;
+            
             sb.setCharAt(index, c);
             if (m_EnglishDictionary.contains(sb.toString()))
             {
                 byte toAdd;
                 if (m_StartOfCurrentWord + index < m_IV.length)
-                    toAdd = CommonFunctions.XorByte((byte) c, m_IV[m_StartOfCurrentWord + index]);
+                    toAdd = CommonFunctions.XorByte((byte) c, m_IV[indexInCipher]);
                 else
-                    toAdd = CommonFunctions.XorByte((byte) c, m_CipherText[m_StartOfCurrentWord + index - m_IV.length]);
+                    toAdd = CommonFunctions.XorByte((byte) c, m_CipherText[indexInCipher - m_IV.length]);
                 
                 m_Key.put((char) toAdd, (char) byteInCipher);
                 return;
@@ -134,41 +204,43 @@ public class Attacker52
     
     private int CountUnknownIndexes(String word)
     {
-        int ans = 0;
+        int counter = 0;
         for (int i = 0; i < word.length(); i++)
             if (!m_Key.containsKey(word.charAt(i)))
-                ans++;
-        return ans;
+                counter++;
+        return counter;
     }
-    
-    private String getNextWord(int index)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (int i = index; i < m_CipherText.length; i++)
-        {
-            char c = (char) m_CipherText[i];
-            byte replace = (byte) c;
-            if (m_ReversedKey.containsKey(c))
-                replace = (byte) m_ReversedKey.get(c).charValue();
-            
-            if (i < m_IV.length)
-                replace = CommonFunctions.XorByte(replace, m_IV[i]);
-            else
-                replace = CommonFunctions.XorByte(replace, m_CipherText[i - m_IV.length - 1]);
-            c = (char) replace;
-            if (Pattern.matches("[\\.,\\s!;?:&\"\\[\\]]+", c + ""))
-                return sb.toString();
-            sb.append(c);
-        }
-        return sb.toString();
-    }
+    //
+    //    private String getNextWord(int index)
+    //    {
+    //        StringBuilder sb = new StringBuilder();
+    //        for (int i = index; i < m_CipherText.length; i++)
+    //        {
+    //            byte replace = m_CipherText[i];
+    //            char c = (char) replace;
+    //
+    //            if (m_ReversedKey.containsKey(c))
+    //                replace = (byte) m_ReversedKey.get(c).charValue();
+    //
+    //            if (i < m_IV.length)
+    //                replace = CommonFunctions.XorByte(replace, m_IV[i]);
+    //            else
+    //                replace = CommonFunctions.XorByte(replace, m_CipherText[i - m_IV.length]);
+    //
+    //            c = (char) replace;
+    //            if (Pattern.matches("[\\.,\\s!;?:&\"\\[\\]]+", c + ""))
+    //                return sb.toString();
+    //            sb.append(c);
+    //        }
+    //        return sb.toString();
+    //    }
     
     private int AnalyzeWordFrom(int start)
     {
         StringBuilder sb = new StringBuilder();
         List<Integer> notConvertedIndexes = new ArrayList<Integer>();
         int lastIndexChecked;
-        for (lastIndexChecked = start; lastIndexChecked < m_IV.length; lastIndexChecked++)
+        for (lastIndexChecked = start; lastIndexChecked < m_CipherText.length; lastIndexChecked++)
         {
             byte decrypted = m_CipherText[lastIndexChecked];
             
@@ -265,4 +337,5 @@ public class Attacker52
                 BruteForceDecryption(prefix + permutation.charAt(i), permutation.substring(0, i) + permutation.substring(i + 1, n));
         }
     }
+    //endregion
 }
