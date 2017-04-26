@@ -29,8 +29,6 @@ public class Main
         catch (Exception e)
         {
             System.out.println(e.getMessage());
-            // TODO: 17-Apr-17 Remove this
-            e.printStackTrace();
             if (e instanceof ParseException)
                 helpFormatter.printHelp("Cyber", options);
             System.exit(1);
