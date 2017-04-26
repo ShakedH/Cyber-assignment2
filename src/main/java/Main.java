@@ -59,7 +59,7 @@ public class Main
         if (algorithm.equals("sub_cbc_10"))
             blockSize = 10;
         else if (algorithm.equals("sub_cbc_52"))
-            blockSize = 52;
+            blockSize = 8128;
         else
             throw new IllegalArgumentException("Unknown Algorithm.");
         
@@ -94,7 +94,7 @@ public class Main
         if (algorithm.equals("sub_cbc_10"))
             blockSize = 10;
         else if (algorithm.equals("sub_cbc_52"))
-            blockSize = 52;
+            blockSize = 8128;
         else
             throw new IllegalArgumentException("Unknown Algorithm.");
         
