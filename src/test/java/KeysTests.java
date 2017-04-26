@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Map;
@@ -10,8 +11,8 @@ public class KeysTests
     @Test
     public void CompareKeys()
     {
-        String originalKeyPath = "C:\\Users\\Ron Michaeli\\Desktop\\key_long.txt";
-        String newKeyPath = "C:\\Users\\Ron Michaeli\\Desktop\\output.txt";
+        String originalKeyPath = "C:\\Users\\user\\Desktop\\New\\key.txt";
+        String newKeyPath = "C:\\Users\\user\\Desktop\\New\\test_out.txt";
         try
         {
             Map<Character, Character> originalKey = CommonFunctions.ReadKeyFromFile(originalKeyPath);
@@ -20,9 +21,8 @@ public class KeysTests
             for (Character c : originalKey.keySet())
                 if (!originalKey.get(c).equals(newKey.get(c)))
                     diff++;
-            System.out.println(diff);
-        }
-        catch (Exception e)
+            Assert.assertEquals(0, diff);
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

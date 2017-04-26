@@ -24,9 +24,24 @@ public class Attacker10
         m_EnglishDictionary = new HashSet<String>(IOUtils.readLines(ClassLoader.getSystemResourceAsStream("Dictionary")));
     }
     
-    public void Attack() throws IOException
+    public void Attack() throws IOException, InterruptedException
     {
-        BruteForceDecryption("", "abcdefgh");
+        Thread t = new Thread()
+        {
+            public void run()
+            {
+                try
+                {
+                    BruteForceDecryption("", "abcdefgh");
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+        t.join(59 * 1000);
+        t.stop();
         CommonFunctions.WriteKeyToFile(m_MinKey, m_OutputPath);
     }
     
