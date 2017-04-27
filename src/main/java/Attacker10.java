@@ -33,7 +33,8 @@ public class Attacker10
                 try
                 {
                     BruteForceDecryption("", "abcdefgh");
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -52,7 +53,7 @@ public class Attacker10
         {
             Map<Character, Character> key = new HashMap<Character, Character>();
             for (int i = 0; i < prefix.length(); i++)
-                key.put((char) (i + 97), prefix.charAt(i));
+                key.put((char)(i + 97), prefix.charAt(i));
             
             byte[] sample = new byte[SAMPLE_SIZE];
             System.arraycopy(m_CipherText, 0, sample, 0, SAMPLE_SIZE);

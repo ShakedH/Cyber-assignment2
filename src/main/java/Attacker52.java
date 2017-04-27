@@ -41,7 +41,8 @@ public class Attacker52
                 {
                     BuildKeyFromKnownTexts();
                     CompleteMissingCharsInKey();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -57,11 +58,11 @@ public class Attacker52
     {
         for (int i = 0; i < m_KnownPlainText.length; i++)
         {
-            char xorResult = (char) CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
+            char xorResult = (char)CommonFunctions.XorByte(m_KnownPlainText[i], m_IV[i]);
             if (!((xorResult >= 'a' && xorResult <= 'z') || (xorResult >= 'A' && xorResult <= 'Z')))    // Not an English letter
                 continue;
             if (!m_Key.containsKey(xorResult))
-                m_Key.put(xorResult, (char) m_KnownCipherText[i]);
+                m_Key.put(xorResult, (char)m_KnownCipherText[i]);
         }
         m_ReversedKey = MapUtils.invertMap(m_Key);
     }
@@ -81,14 +82,16 @@ public class Attacker52
         }
     }
     
+    // Returns <word, index of unknown char in the word>
     private Pair<String, Integer> getNextWord(int startFrom)
     {
         StringBuilder word = new StringBuilder();
         int unknownCharIndex = -1;
         boolean moreThanOneUnknown = false;
+        
         for (int i = startFrom; i < m_CipherText.length; i++)
         {
-            char c = (char) m_CipherText[i];
+            char c = (char)m_CipherText[i];
             
             if (m_ReversedKey.containsKey(c))
             {
@@ -103,14 +106,16 @@ public class Attacker52
             }
             else    // c is not in key and is English letter
             {
-                if (unknownCharIndex != -1)
+                if (unknownCharIndex != -1 && !moreThanOneUnknown)
                     moreThanOneUnknown = true;
-                unknownCharIndex = i - startFrom;
+                else
+                    unknownCharIndex = i - startFrom;
             }
             word.append(c);
         }
         if (moreThanOneUnknown)
             return new Pair<String, Integer>(word.toString(), -1);
+        
         return new Pair<String, Integer>(word.toString(), unknownCharIndex);
     }
     
@@ -140,14 +145,14 @@ public class Attacker52
                 (matchingChar < 'a' || matchingChar > 'z') && (matchingChar < 'A' || matchingChar > 'Z')) // matchingChar is not english letter
             return;
         
-        m_Key.put(matchingChar, (char) m_CipherText[absoluteIndex]);
+        m_Key.put(matchingChar, (char)m_CipherText[absoluteIndex]);
         m_ReversedKey = MapUtils.invertMap(m_Key);
     }
     
     private char XorChars(char c, int index)
     {
         if (index < m_IV.length)
-            return (char) CommonFunctions.XorByte((byte) c, m_IV[index]);
-        return (char) CommonFunctions.XorByte((byte) c, m_CipherText[index - m_IV.length]);
+            return (char)CommonFunctions.XorByte((byte)c, m_IV[index]);
+        return (char)CommonFunctions.XorByte((byte)c, m_CipherText[index - m_IV.length]);
     }
 }

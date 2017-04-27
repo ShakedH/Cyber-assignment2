@@ -30,7 +30,7 @@ public class CommonFunctions
     
     public static byte XorByte(byte a, byte b)
     {
-        return (byte) (a ^ b);
+        return (byte)(a ^ b);
     }
     
     public static void WriteStringToFile(String filePath, String text, boolean append) throws IOException
