@@ -21,17 +21,20 @@ public class Encryptor
     public String Encrypt(byte[] plainTextBytes) throws UnsupportedEncodingException
     {
         int missingChars = m_BlockSize - plainTextBytes.length % m_BlockSize;
-        byte[] result = new byte[plainTextBytes.length + missingChars];
         byte[] vector = m_IV;
+        byte[] result = new byte[plainTextBytes.length + missingChars];
+        byte[] toEncode = new byte[result.length];
         
+        // Copy PlainText to toEncode:
+        System.arraycopy(plainTextBytes, 0, toEncode, 0, plainTextBytes.length);
         // Pad with 0's:
-        Arrays.fill(result, plainTextBytes.length, result.length, (byte) 0);
+        Arrays.fill(toEncode, plainTextBytes.length, result.length, (byte) 0);
         
-        for (int i = 0; i < plainTextBytes.length; i++)
+        for (int i = 0; i < result.length; i++)
         {
             byte toXor = i < m_BlockSize ? vector[i] : result[i - m_BlockSize];
             
-            byte toAdd = CommonFunctions.XorByte(toXor, plainTextBytes[i]);
+            byte toAdd = CommonFunctions.XorByte(toXor, toEncode[i]);
             
             if (m_Key.containsKey((char) toAdd))
                 toAdd = (byte) (m_Key.get((char) toAdd).charValue());
