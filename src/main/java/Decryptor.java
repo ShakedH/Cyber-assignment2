@@ -30,11 +30,11 @@ public class Decryptor
         byte[] vectorBytes = m_IV;
         for (int i = 0; i < cipherBytes.length; i++)
         {
-            char cipherChar = (char)cipherBytes[i];
+            char cipherChar = (char) cipherBytes[i];
             
             byte decrypted;
             if (m_ReversedKey.containsKey(cipherChar))
-                decrypted = (byte)m_ReversedKey.get(cipherChar).charValue();
+                decrypted = (byte) m_ReversedKey.get(cipherChar).charValue();
             else
                 decrypted = cipherBytes[i];
             
@@ -45,9 +45,7 @@ public class Decryptor
         }
         
         // Remove 0 padding:
-        String toRemove = "";
-        toRemove += (char)0;
-        return StringUtils.strip(new String(result, "UTF-8"), toRemove);
+        return StringUtils.strip(new String(result, "UTF-8"), "\0");
     }
     
     private Map<Character, Character> ReverseKey(Map<Character, Character> key)
